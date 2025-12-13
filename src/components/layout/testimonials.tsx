@@ -6,54 +6,41 @@ import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
 const testimonials = [
   {
     id: 1,
-    name: "Piter Bowman",
-    role: "Business CEO",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    polaroidImage: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=600&h=600&fit=crop",
+    name: "Funmito Dorcas",
+    role: "Parent",
+    image: "/parent_1.png",
+    polaroidImage: "/parent_1.png",
     testimonial: "Leverage Agile Frameworks To Provide A Robust Synopsis For High Level Overviews. Iterative In Approaches To Corporate Strategy Data Foster Go To Collaborative Thinking.",
     teamImages: [
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
+      "/parent_1.png",
+      "/parent_2.jpg",
+      "/parent_3.png"
     ]
   },
   {
     id: 2,
-    name: "Sarah Mitchell",
-    role: "Travel Blogger",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    polaroidImage: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&h=600&fit=crop",
+    name: "Aisha Anathony",
+    role: "Parent",
+    image: "/parent_2.jpg",
+    polaroidImage: "/parent_2.jpg",
     testimonial: "An incredible experience from start to finish! The attention to detail and personalized service made our vacation truly unforgettable. Highly recommend to anyone seeking adventure.",
     teamImages: [
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop"
+      "/parent_1.png",
+      "/parent_2.jpg",
+      "/parent_3.png"
     ]
   },
   {
     id: 3,
-    name: "Michael Chen",
-    role: "Adventure Enthusiast",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
-    polaroidImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop",
+    name: "Okewumi Taiwo",
+    role: "Parent",
+    image: "/parent_3.png",
+    polaroidImage: "/parent_3.png",
     testimonial: "Outstanding service and amazing destinations! Every moment was perfectly planned and executed. The team went above and beyond to ensure we had the trip of a lifetime.",
     teamImages: [
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
-    ]
-  },
-  {
-    id: 4,
-    name: "Emma Rodriguez",
-    role: "Family Traveler",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
-    polaroidImage: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=600&fit=crop",
-    testimonial: "Perfect for families! They took care of every detail, making our vacation stress-free and enjoyable. The kids had an amazing time, and so did we. Can't wait to book our next adventure!",
-    teamImages: [
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
+      "/parent_1.png",
+      "/parent_2.jpg",
+      "/parent_3.png"
     ]
   }
 ]
@@ -133,7 +120,7 @@ export default function Testimonials() {
                     <img
                       src={testimonials[(currentIndex + 1) % testimonials.length].polaroidImage}
                       alt="Next testimonial"
-                      className="w-full h-full object-cover opacity-60"
+                      className="w-full h-full object-cover object-top opacity-60"
                     />
                   </div>
                   <div className="h-12 sm:h-16"></div>
@@ -153,7 +140,7 @@ export default function Testimonials() {
                     <img
                       src={currentTestimonial.polaroidImage}
                       alt={`${currentTestimonial.name}'s travel moment`}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                      className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-110"
                     />
                     {/* Decorative Corner Tape Effect */}
                     <div className="absolute top-2 right-2 sm:top-4 sm:right-4 w-8 sm:w-12 h-8 sm:h-12 border-t-4 border-r-4 border-white/70 opacity-80"></div>
@@ -219,7 +206,7 @@ export default function Testimonials() {
                   <img
                     src={currentTestimonial.image}
                     alt={currentTestimonial.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="flex-1">

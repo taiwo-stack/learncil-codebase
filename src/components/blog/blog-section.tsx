@@ -41,17 +41,17 @@ const blogPosts = [
 
 export function BlogSection() {
   return (
-    <section className="py-16 sm:py-20 px-4 bg-white">
+    <section className="py-16 sm:py-20 px-4 bg-gradient-to-br from-rose-50 via-slate-50/40 to-gray-50/30">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <p className="text-emerald-600 font-medium mb-2">Explore the world</p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-2">
+          <p className="text-blue-600 font-semibold mb-2 text-sm md:text-base">FROM THE BLOG</p>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
             Latest News & Articles
           </h2>
-          <h3 className="text-3xl md:text-4xl font-light text-blue-300 italic">
-            From The Blog
-          </h3>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Stay updated with our latest insights, stories, and educational content.
+          </p>
         </div>
 
         {/* Blog Grid */}
@@ -59,7 +59,7 @@ export function BlogSection() {
           {blogPosts.map((post) => (
             <article
               key={post.id}
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group"
+              className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group border border-gray-100"
             >
               {/* Image */}
               <div className="relative h-64 overflow-hidden">
@@ -69,7 +69,7 @@ export function BlogSection() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 {/* Category Badge */}
-                <div className="absolute top-4 left-4">
+                <div className="absolute top-4 right-4">
                   <span className={`${post.categoryColor} text-white px-4 py-1.5 rounded text-xs font-semibold flex items-center gap-1`}>
                     <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                     {post.category}
@@ -82,12 +82,12 @@ export function BlogSection() {
                 {/* Meta Info */}
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                   <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
+                    <Calendar className="h-4 w-4 text-blue-500" />
                     <span>{post.date}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <MessageCircle className="h-4 w-4" />
-                    <span>Coments({post.comments})</span>
+                    <MessageCircle className="h-4 w-4 text-blue-500" />
+                    <span>Comments({post.comments})</span>
                   </div>
                 </div>
 
@@ -103,8 +103,8 @@ export function BlogSection() {
 
                 {/* Read More */}
                 <Link 
-                  href={`/blog/${post.id}`}
-                  className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:gap-3 transition-all group"
+                  href={`/blog/${post.id}`} // This now correctly links to the dynamic page
+                  className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:gap-3 transition-all group"
                 >
                   Read More
                   <ArrowRight className="h-4 w-4" />
@@ -115,45 +115,13 @@ export function BlogSection() {
         </div>
 
         {/* CTA Banner */}
-        <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-700/30 rounded-full blur-2xl"></div>
-          
-          {/* Plane Icon */}
-          <div className="relative z-10">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-              </div>
-              <div className="text-white">
-                <h3 className="text-2xl md:text-3xl font-bold mb-1">
-                  Ready To Adventure And Enjoy Natural
-                </h3>
-                <p className="text-emerald-50 text-sm md:text-base">
-                  Lorem Ipsum Dolor Sit Amet, Consectetur Notted Adipisicin
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Button */}
-          <div className="relative z-10">
-            <Link href="/tours">
-              <button className="bg-white text-emerald-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-emerald-50 transition-all duration-300 hover:scale-105 shadow-lg whitespace-nowrap">
-                LET&apos;S GET STARTED
-              </button>
-            </Link>
-          </div>
-
-          {/* Decorative Plane Trail */}
-          <div className="absolute top-1/2 right-1/4 transform -translate-y-1/2">
-            <svg className="w-32 h-32 text-white/10" viewBox="0 0 100 100" fill="none">
-              <path d="M10 50 Q 30 30, 50 50 T 90 50" stroke="currentColor" strokeWidth="2" strokeDasharray="5,5" />
-            </svg>
-          </div>
+        <div className="text-center mt-16">
+          <Link href="/blog">
+            <button className="group inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-base hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              VIEW ALL ARTICLES
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -131,6 +131,32 @@ export interface AmbassadorStats {
 }
 
 export interface PaymentIntent {
-  clientSecret: string
-  amount: number
+  clientSecret: string;
+  amount: number;
+}
+
+export interface Course {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  duration: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  status: 'draft' | 'published' | 'archived';
+  outcome: string;
+  enrolledStudents: number;
+  rating: number;
+  imageUrl?: string;
+  createdAt: any;
+  updatedAt: any;
+}
+
+export interface CourseAssignment {
+  id: string;
+  courseId: string;
+  studentId: string;
+  instructorId: string;
+  assignedAt: any;
+  status: 'active' | 'completed' | 'dropped';
 }

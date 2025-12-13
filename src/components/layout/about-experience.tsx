@@ -1,225 +1,234 @@
-"use client"
+'use client';
 
-import { Shield, Heart, Globe, ArrowRight, Play } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
-
-const features = [
-  {
-    icon: Globe,
-    title: "Authentic Tours",
-    description: "Experience Nigeria through the eyes of locals"
-  },
-  {
-    icon: Heart,
-    title: "Cultural Immersion",
-    description: "Connect deeply with traditions and communities"
-  },
-  {
-    icon: Shield,
-    title: "Safe Experiences",
-    description: "Your safety and comfort are our top priority"
-  }
-]
+import { FileText, CheckSquare, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
 
 export default function AboutExperienceSection() {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [firstImageError, setFirstImageError] = useState(false);
+  const [secondImageError, setSecondImageError] = useState(false);
 
   return (
-    <section className="relative py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-gray-50 via-white to-emerald-50 overflow-hidden">
-      {/* Floating Background Elements */}
-      <div className="absolute top-20 right-10 w-64 h-64 bg-emerald-100 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-20 left-10 w-80 h-80 bg-blue-100 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
-      
-      {/* Decorative Icons */}
-      <div className="absolute top-32 left-20 text-emerald-300 opacity-30 hidden lg:block">
-        <svg className="w-16 h-16 animate-spin" style={{ animationDuration: '20s' }} fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2L9.19 8.63L2 9.24l5.46 4.73L5.82 21L12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/>
-        </svg>
-      </div>
-      
-      <div className="absolute bottom-40 right-32 text-blue-300 opacity-30 hidden lg:block">
-        <svg className="w-20 h-20" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-        </svg>
-      </div>
+    <section className="relative bg-gradient-to-br from-blue-50 via-indigo-50/30 to-purple-50/20 py-16 md:py-24 lg:py-32 overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-20 right-10 w-32 h-32 border-4 border-blue-100 rounded-full opacity-30 animate-float-slow"></div>
+      <div className="absolute bottom-20 right-20 w-48 h-48 border-4 border-blue-100 rounded-full opacity-20 animate-float"></div>
+      <div className="absolute top-40 left-10 w-20 h-20 bg-blue-100 rounded-full opacity-20 animate-float-delayed"></div>
 
-      {/* Dotted Path Decoration */}
-      <div className="absolute top-1/2 left-0 w-full h-px hidden lg:block">
-        <div className="border-t-2 border-dashed border-emerald-200 opacity-50"></div>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-20 items-center">
+          
+          {/* Left Side - Creative Image Layout */}
+          <div className="relative">
+            {/* Mobile/Tablet Layout (Hidden on Desktop) */}
+            <div className="block lg:hidden">
+              <div className="relative px-4">
+                {/* First Image */}
+                <div className="relative w-full h-[280px] md:h-[340px] rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-all duration-500 bg-blue-50">
+                  <Image
+                    src={firstImageError ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KM0ZoGIaKKKBCUtIKKBiHFIKM0UAJR3paKAENApaKAG/jRilooASig0UAFGaSikA6iiigYlJS0UAJRS0lAhKKXFJQMKKWigBKKKWgBKO9FFACUUtJQAlFLSUALRSUtAxKQ0tJSELRSUUDFpKWkoAKKKKACiiigApKKKAEpaTNFMQtJRRQAlLSUtIYUlFFABRRRQB//2Q==" : "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1000&q=75"}
+                    alt="Students studying together in library"
+                    fill
+                    className="object-cover"
+                    priority
+                    onError={() => setFirstImageError(true)}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
-
-
-          {/* Left Side - Visual Content */}
-          <div className="relative order-2 lg:order-1" data-aos="fade-right">
-            <div className="relative">
-    
-              {/* Main Image/Video Container */}
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                
-                {!isVideoPlaying ? (
-                  <>
-                    {/* Photo Collage */}
-                    <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                      {/* Top Left - Large */}
-                      <div className="col-span-2 relative h-64 sm:h-80 overflow-hidden group">
-                        <img
-                          src="https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=800&h=600&fit=crop"
-                          alt="Tour experience"
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                {/* Experience Badge - Overlapping both images */}
+                <div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 z-10">
+                  <div className="relative bg-white/95 backdrop-blur-sm rounded-full w-40 h-40 md:w-48 md:h-48 shadow-[0_8px_32px_rgba(0,0,0,0.2)] flex items-center justify-center group hover:scale-105 transition-all duration-500">
+                    {/* Enhanced Gradient Border */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-600 via-blue-500 to-blue-400 opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
+                    <div className="absolute inset-[3px] rounded-full bg-gradient-to-b from-white via-white to-blue-50"></div>
+                    
+                    {/* Inner Content */}
+                    <div className="relative z-10 text-center p-4">
+                      {/* Icon */}
+                      <div className="mb-1">
+                        <div className="w-10 h-10 md:w-12 md:h-12 mx-auto bg-gradient-to-tr from-blue-600 to-blue-400 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-blue-500/25 transition-all duration-500">
+                          <div className="w-5 h-5 md:w-6 md:h-6 bg-white rounded-sm transform rotate-45 group-hover:rotate-[225deg] transition-transform duration-500"></div>
+                        </div>
                       </div>
-
-
-                      {/* Bottom Left */}
-                      <div className="relative h-40 sm:h-48 overflow-hidden group">
-                        <img
-                          src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&h=300&fit=crop"
-                          alt="Cultural experience"
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                      </div>    
-
-               
-                      {/* Bottom Right */}
-                      <div className="relative h-40 sm:h-48 overflow-hidden group">
-                        <img
-                          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
-                          alt="Adventure moment"
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
+                      
+                      {/* Text Content */}
+                      <div className="mt-2">
+                        <div className="text-[11px] md:text-sm uppercase tracking-wider text-blue-600 font-medium">Personalized Learning</div>
+                        <div className="text-3xl md:text-4xl font-extrabold bg-gradient-to-br from-blue-600 to-blue-800 bg-clip-text text-transparent my-1">100%</div>
+                        <div className="text-[11px] md:text-sm uppercase tracking-wider text-gray-600 font-medium">Trusted by Families</div>
                       </div>
                     </div>
 
-
-
-
-                    {/* Play Button Overlay */}
-                    <button
-                      onClick={() => setIsVideoPlaying(true)}
-                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform group"
-                    >
-                      <Play className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-600 ml-1 group-hover:text-emerald-700" fill="currentColor" />
-                    </button>
-                  </>
-                ) : (
-                  <div className="aspect-video bg-gray-900">
-                    <iframe
-                      className="w-full h-full"
-                      src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                      title="Tour experience video"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                    {/* Rotating Circle Text */}
+                    <svg className="absolute inset-0 w-full h-full animate-spin-slow" viewBox="0 0 100 100">
+                      <defs>
+                        <path id="circlePath" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"></path>
+                      </defs>
+                      <text className="text-[11px] md:text-[13px]" fill="#3B82F6">
+                        <textPath href="#circlePath" startOffset="0%">
+                          • TRANSFORMING EDUCATION • INSPIRING FUTURES • LEARNING EXCELLENCE •
+                        </textPath>
+                      </text>
+                    </svg>
                   </div>
-                )}
+                </div>
+
+                {/* Second Image */}
+                <div className="relative w-full h-[280px] md:h-[340px] mt-4 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-all duration-500 bg-blue-50">
+                  <Image
+                    src={secondImageError ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KM0ZoGIaKKKBCUtIKKBiHFIKM0UAJR3paKAENApaKAG/jRilooASig0UAFGaSikA6iiigYlJS0UAJRS0lAhKKXFJQMKKWigBKKKWgBKO9FFACUUtJQAlFLSUALRSUtAxKQ0tJSELRSUUDFpKWkoAKKKKACiiigApKKKAEpaTNFMQtJRRQAlLSUtIYUlFFABRRRQB//2Q==" : "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1000&q=75"}
+                    alt="Students collaborating on laptop"
+                    fill
+                    className="object-cover"
+                    onError={() => setSecondImageError(true)}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Layout (Hidden on Mobile/Tablet) */}
+            <div className="hidden lg:block relative h-[700px]">
+              {/* Main Image */}
+              <div className="absolute top-0 left-0 w-[65%] h-[70%] rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 bg-blue-50">
+                <Image
+                  src={firstImageError ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KM0ZoGIaKKKBCUtIKKBiHFIKM0UAJR3paKAENApaKAG/jRilooASig0UAFGaSikA6iiigYlJS0UAJRS0lAhKKXFJQMKKWigBKKKWgBKO9FFACUUtJQAlFLSUALRSUtAxKQ0tJSELRSUUDFpKWkoAKKKKACiiigApKKKAEpaTNFMQtJRRQAlLSUtIYUlFFABRRRQB//2Q==" : "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1000&q=75"}
+                  alt="Students studying together in library"
+                  fill
+                  className="object-cover"
+                  priority
+                  onError={() => setFirstImageError(true)}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
               </div>
 
-
-
-
-              {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-6 bg-emerald-600 text-white px-6 py-4 rounded-2xl shadow-xl transform rotate-3 hover:rotate-0 transition-transform">
-                <div className="text-center">
-                  <div className="text-3xl font-bold">500+</div>
-                  <div className="text-sm opacity-90">Happy Travelers</div>
+              {/* Experience Badge */}
+              <div className="absolute top-[15%] right-[5%] z-30">
+                <div className="relative bg-white rounded-full w-52 h-52 shadow-2xl flex items-center justify-center animate-float group">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-600 via-blue-500 to-blue-400 opacity-20"></div>
+                  <div className="absolute inset-[3px] rounded-full bg-white"></div>
+                  <div className="relative z-10 text-center">
+                    <div className="text-xs uppercase tracking-widest text-blue-600"><b>Learncil</b></div>
+                    <div className="text-5xl font-extrabold bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text text-transparent">100%</div>
+                    <div className="text-xs uppercase tracking-widest text-gray-600"><b>Trusted</b></div>
+                  </div>
                 </div>
               </div>
 
-              {/* Decorative Compass */}
-              <div className="absolute -top-8 -left-8 w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center animate-spin" style={{ animationDuration: '10s' }}>
-                <svg className="w-10 h-10 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2L9.19 8.63L2 9.24l5.46 4.73L5.82 21L12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/>
-                </svg>
+              {/* Secondary Image */}
+              <div className="absolute bottom-0 right-0 w-[60%] h-[55%] rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 bg-blue-50">
+                <Image
+                  src={secondImageError ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KM0ZoGIaKKKBCUtIKKBiHFIKM0UAJR3paKAENApaKAG/jRilooASig0UAFGaSikA6iiigYlJS0UAJRS0lAhKKXFJQMKKWigBKKKWgBKO9FFACUUtJQAlFLSUALRSUtAxKQ0tJSELRSUUDFpKWkoAKKKKACiiigApKKKAEpaTNFMQtJRRQAlLSUtIYUlFFABRRRQB//2Q==" : "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1000&q=75"}
+                  alt="Students collaborating on laptop"
+                  fill
+                  className="object-cover"
+                  onError={() => setSecondImageError(true)}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
               </div>
             </div>
           </div>
 
-
-          {/* Right Side - Text Content */}
-          <div className="order-1 lg:order-2 space-y-6 sm:space-y-8" data-aos="fade-left">
-            {/* Tagline */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span className="text-emerald-700 font-semibold text-sm uppercase tracking-wider">
-                About the Experience
-              </span>
+          {/* Right Side Content */}
+          <div className="space-y-6 md:space-y-8 animate-fade-in-right">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 rounded-full border border-blue-100">
+              <FileText className="w-5 h-5 text-blue-600" />
+              <span className="uppercase tracking-wider text-blue-600 font-bold text-sm">GET TO KNOW ABOUT US</span>
             </div>
 
-            {/* Heading */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-              We Take You Beyond the{" "}
-              <span className="text-emerald-600 relative inline-block">
-                Ordinary Journey
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-200" viewBox="0 0 200 10" preserveAspectRatio="none">
-                  <path d="M0,5 Q50,0 100,5 T200,5" fill="none" stroke="currentColor" strokeWidth="3"/>
-                </svg>
+            {/* Heading with Gradient */}
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-gray-900 leading-tight">
+              Shaping Confident,{' '}
+              <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                Curious, and Future-Ready Learners
               </span>
+              <br />
+              Everywhere.
+              
             </h2>
 
             {/* Description */}
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-              At Boxout City Tour, we don't just show you Nigeria—we help you feel it. 
-              From hidden local gems to iconic landmarks, every tour is crafted to connect 
-              you authentically with our rich culture, warm people, and unforgettable stories.
-            </p>
+            <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+              LearnCil Academy is a modern learning community designed to help every child grow with confidence, curiosity, and the skills they need to succeed in today’s world. We believe that education should feel engaging, personal, and empowering not confusing, stressful, or one-size-fits-all.
+        </p>
 
-            {/* Features Grid */}
-            <div className="grid sm:grid-cols-3 gap-6 pt-4">
-              {features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="group text-center sm:text-left"
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
-                >
-                  <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-emerald-50 rounded-2xl mb-4 group-hover:bg-emerald-600 transition-colors duration-300">
-                    <feature.icon className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-600 group-hover:text-white transition-colors duration-300" />
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2 text-base sm:text-lg">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </p>
+            {/* Enhanced Features List */}
+            <div className="space-y-5 pt-2">
+              <div className="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300">
+                <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                  <CheckSquare className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
                 </div>
-              ))}
+                <p className="text-base md:text-lg text-gray-700 font-semibold pt-0.5">
+                  <b>Personalized mastery-based learning: </b>Learning tailored to each child’s strengths and pace.
+                </p>
+              </div>
+
+              <div className="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300">
+                <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                  <CheckSquare className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
+                </div>
+                <p className="text-base md:text-lg text-gray-700 font-semibold pt-0.5">
+                  <b>Culturally sensitive teaching: </b>Instruction that respects identity and learning style.
+                </p>
+              </div>
+
+              <div className="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300">
+                <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                  <CheckSquare className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
+                </div>
+                <p className="text-base md:text-lg text-gray-700 font-semibold pt-0.5">
+                  <b>Curriculum versatility:</b> Support for British, American, Nigerian, and hybrid systems.
+                </p>
+              </div>
+
+              
+              <div className="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300">
+                <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                  <CheckSquare className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
+                </div>
+                <p className="text-base md:text-lg text-gray-700 font-semibold pt-0.5">
+                 <b>Tech-forward instruction: </b> Digital tools and interactive platforms that enhance learning.
+                </p>
+              </div>
+
             </div>
 
-            {/* CTA Button */}
-            <div className="pt-4">
-              <Link href="/about">
-                <button className="group inline-flex items-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl">
-                  Learn More About Us
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </Link>
-            </div>
-
-
-
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center gap-6 pt-4 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-                <span>4.9/5 Rating</span>
-              </div>
-              <div className="w-px h-4 bg-gray-300"></div>
-              <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-emerald-500" />
-                <span>Licensed & Insured</span>
-              </div>
+            {/* Enhanced CTA Button */}
+            <div className="pt-6">
+              <button className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-5 rounded-xl font-bold text-base md:text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 overflow-hidden">
+                <span className="absolute inset-0 w-0 bg-white opacity-10 group-hover:w-full transition-all duration-500"></span>
+                <span className="relative">ABOUT MORE</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform relative" />
+              </button>
             </div>
           </div>
-
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-15px) translateX(10px); }
+        }
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0px) scale(1); }
+          50% { transform: translateY(-15px) scale(1.1); }
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+        .animate-float-delayed { animation: float-delayed 7s ease-in-out infinite; }
+        .animate-spin-slow { animation: spin-slow 20s linear infinite; }
+      `}</style>
     </section>
-  )
+  );
 }

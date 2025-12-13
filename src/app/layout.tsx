@@ -1,25 +1,49 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
-import { Navbar } from '@/components/layout/navbar'
+import Navbar from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
+import Auth from '@/components/layout/Auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '@/components/layout/firebase';
 
 const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Tourism Adventures | Discover Amazing Destinations',
-  description: 'Explore incredible destinations with our curated tours and adventures. Book your next unforgettable experience today.',
-  keywords: 'tourism, travel, tours, adventures, destinations, booking',
-}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const [showAuth, setShowAuth] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Check if current page is a dashboard page
+  const isDashboardPage = pathname?.includes('/dashboard/');
+
+  // Show navbar only on non-dashboard pages or when not authenticated
+  const shouldShowNavbar = !isDashboardPage || !isAuthenticated;
+  const shouldShowFooter = !isDashboardPage || !isAuthenticated;
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <title>Learncil | Your Gateway to Quality Education</title>
+        <meta name="description" content="Access high-quality courses, expert teachers, and a supportive learning community. Start your educational journey with Learncil today." />
+        <meta name="keywords" content="education, online courses, learning, teachers, students, e-learning, education platform" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -28,9 +52,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="relative flex min-h-screen flex-col">
-            <Navbar />
+            {shouldShowNavbar && <Navbar onLoginClick={() => setShowAuth(true)} />}
             <main className="flex-1">{children}</main>
-            <Footer />
+            {showAuth && <Auth onClose={() => setShowAuth(false)} />}
+            {shouldShowFooter && <Footer />}
           </div>
         </ThemeProvider>
       </body>

@@ -1,223 +1,255 @@
-"use client"
-import Link from 'next/link'
-import { useState } from 'react'
-import { Menu, X, ChevronDown, Calendar, Phone, Mail, Facebook, Twitter, Linkedin } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { fa } from 'zod/v4/locales'
-import Image from 'next/image'
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Search, ShoppingCart, Heart, ChevronDown, Phone, Mail, Clock, Menu, X, User, Facebook, Twitter, Linkedin, Youtube, LogOut } from 'lucide-react';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from './firebase';
+import Link from 'next/link';
+import Image from 'next/image';
 
+interface NavbarProps {
+  onLoginClick: () => void;
+}
 
-export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState(null)
+export default function Navbar({ onLoginClick }: NavbarProps) {
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
 
-  const navigationItems = [
-    { href: '/', label: 'Home', hasDropdown: false },
-    { href: '/tours', label: 'Tour', hasDropdown: false },
-    {href: '/ambassadors', label: 'Ambassador Program', hasDropdown: false},
-    { href: '/blog', label: 'Blog', hasDropdown: false },
-    { href: '/gallery', label: 'Gallery', hasDropdown: false },
-    {href: '/about', label: 'About Us', hasDropdown: false},
-    { href: '/contact', label: 'Contact Us', hasDropdown: false },
-    
-   
-   
-  ]
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const navItems = [
+    { label: 'HOME', hasDropdown: false, sectionId: 'home' },
+    { label: 'SERVICES', hasDropdown: false, sectionId: 'services' },
+    { label: 'ABOUT US', hasDropdown: false, sectionId: 'about' },
+    { label: 'COURSES', hasDropdown: false, sectionId: 'courses' },
+    { label: 'TESTIMONIALS', hasDropdown: false, sectionId: 'testimonials' },
+    { label: 'BLOG', hasDropdown: false, sectionId: 'blog' },
+    // { label: '', hasDropdown: false }
+  ];
 
   return (
-    <nav className="bg-white sticky top-0 z-50 shadow-sm">
-      {/* Top Bar */}
-      <div className="bg-gray-50 border-b border-gray-200">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center h-12 text-sm">
-            {/* Left side - Contact Info */}
-            <div className="hidden lg:flex items-center space-x-6 text-gray-600">
-              <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-green-600" />
-                <span>Thursday, Mar 26, 2021</span>
+    <header className="w-full bg-white shadow-sm">
+  {/* Top Bar */}
+  <div className="bg-[#1C3C68] text-white py-2 px-4">
+        <div className="max-w-7xl mx-auto">
+          {/* Mobile Top Bar */}
+          <div className="md:hidden flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Phone size={14} className="text-white" />
+              <span className="text-xs">+234 906 1814 608</span>
+            </div>
+            <div className="flex items-center gap-x-3">
+              <a href="#" className="hover:opacity-90 transition-opacity"><Facebook size={14} className="text-white" /></a>
+              <a href="#" className="hover:opacity-90 transition-opacity"><Twitter size={14} className="text-white" /></a>
+            </div>
+          </div>
+
+          {/* Desktop Top Bar */}
+          <div className="hidden md:flex justify-between items-center text-xs">
+            <div className="flex items-center gap-x-6">
+              <div className="flex items-center gap-2">
+                <Phone size={14} className="text-white" />
+                <span>+234 906 1814 608</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-green-600" />
-                <a href="mailto:info@boxoutcity.Com" className="hover:text-green-600">Info@boxoutcity.Com</a>
+              <div className="flex items-center gap-2">
+                <Mail size={14} className="text-white" />
+                <span>info@learncil.com</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-green-600" />
-                <a href="tel:6845550102490" className="hover:text-green-600">684 555-0102 490</a>
+              <div className="flex items-center gap-2">
+                <Clock size={14} className="text-white" />
+                <span>Mon - Sat: 8:00 - 15:00</span>
               </div>
             </div>
-
-            {/* Right side - Booking & Social */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-green-600" />
-                <Link href="/booking" className="text-green-600 hover:text-green-700 font-medium">
-                  Booking Now
-                </Link>
-              </div>
-              <span className="text-gray-400">|</span>
-              <span className="text-gray-600">Follow Us:</span>
-              <div className="flex items-center space-x-2">
-                <a href="#" className="text-gray-600 hover:text-green-600">
-                  <Facebook className="h-4 w-4" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-green-600">
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-600 hover:text-green-600">
-                  <Twitter className="h-4 w-4" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-green-600">
-                  <Linkedin className="h-4 w-4" />
-                </a>
+            
+            <div className="flex items-center gap-x-4">
+              <span>Follow Us:</span>
+              <div className="flex gap-x-3">
+                <a href="#" className="hover:opacity-90 transition-opacity"><Facebook size={16} className="text-white" /></a>
+                <a href="#" className="hover:opacity-90 transition-opacity"><Twitter size={16} className="text-white" /></a>
+                <a href="#" className="hover:opacity-90 transition-opacity"><Linkedin size={16} className="text-white" /></a>
+                <a href="#" className="hover:opacity-90 transition-opacity"><Youtube size={16} className="text-white" /></a>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Navigation */}
-      <div className="border-b border-gray-100">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="flex items-center">
-                <svg className="h-8 w-8" viewBox="0 0 40 40" fill="none">
-                  <path d="M20 5L5 15V25L20 35L35 25V15L20 5Z" fill="#10B981" opacity="0.2"/>
-                  <path d="M20 10L10 17V27L20 34L30 27V17L20 10Z" fill="#10B981"/>
-                  <circle cx="20" cy="20" r="4" fill="white"/>
-                </svg>
-                <span className="ml-2 text-2xl font-bold text-gray-900">Boxoutcity</span>
-              </div>
-            </Link>
+      {/* Main Header */}
+      <div className="relative z-10">
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4">
+              <Image
+                src="/logolearcil.png"
+                alt="Learncil Logo"
+                width={150}
+                height={50}
+                className="h-10 sm:h-12 w-auto"
+                priority
+              />
+          </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
-              {navigationItems.map((item) => (
-                <div key={item.href} className="relative group">
-                  <Link
-                    href={item.href}
-                    className="flex items-center space-x-1 text-gray-700 hover:text-green-600 transition-colors font-medium py-8"
-                  >
-                    <span>{item.label}</span>
-                    {item.hasDropdown && <ChevronDown className="h-4 w-4" />}
-                  </Link>
-                </div>
-              ))}
-            </div>
-
-            {/* Desktop Right Side */}
-            <div className="hidden lg:flex items-center space-x-4">
-              {/* <button className="text-gray-700 hover:text-green-600">
-                <span className="flex items-center space-x-1">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </span>
-              </button> 
-              <div className="flex items-center space-x-2 border-l pl-4">
-                <span className="text-gray-700 flex items-center space-x-1">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                  </svg>
-                  <span>English</span>
-                  <ChevronDown className="h-4 w-4" />
-                </span>
-              </div>*/}
-
-             
-
-              <div className="flex items-center space-x-2">
-                
-                <Link 
-                    href="/ambassador-signup" 
-                    className="font-medium bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors inline-flex items-center justify-center gap-1"
-                  >
-                    Become Ambassador
-                  </Link>
-              </div>
-              <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop" alt="User" className="w-full h-full object-cover" />
-              </div>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="lg:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsOpen(!isOpen)}
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-x-8 ml-8">
+            {navItems.map((item, idx) => (
+              <div
+                key={idx}
+                className="relative"
+                onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.label)}
+                onMouseLeave={() => setActiveDropdown(null)}
               >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="lg:hidden bg-white border-b border-gray-200">
-          <div className="px-4 pt-2 pb-4 space-y-2">
-            {/* Mobile Contact Info */}
-            {/* <div className="py-3 space-y-2 border-b border-gray-200 mb-2">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Mail className="h-4 w-4 text-green-600" />
-                <a href="mailto:Info@Webmail.Com">Info@Webmail.Com</a>
+                <button
+                  onClick={() => scrollToSection(item.sectionId)}
+                  className="flex items-center gap-1 text-black font-medium hover:text-[#4A90E2] transition"
+                >
+                  {item.label}
+                  {item.hasDropdown && <ChevronDown size={16} />}
+                </button>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Phone className="h-4 w-4 text-green-600" />
-                <a href="tel:6845550102490">684 555-0102 490</a>
+            ))}
+          </nav>
+
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-x-4 ml-auto">
+            {/* Search Bar */}
+            <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-64">
+              <input
+                type="text"
+                placeholder="Search For Course...."
+                className="bg-transparent outline-none text-sm w-full"
+              />
+              <Search size={18} className="text-gray-400" />
+            </div>
+
+            {/* Icons */}
+            {/* <div className="hidden sm:flex items-center gap-x-4">
+              <div className="relative cursor-pointer">
+                <Heart size={22} className="text-[#1C3C68]" />
+                <span className="absolute -top-2 -right-2 bg-[#4A90E2] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
+              </div>
+              <div className="relative cursor-pointer">
+                <ShoppingCart size={22} className="text-[#1C3C68]" />
+                <span className="absolute -top-2 -right-2 bg-[#4A90E2] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">5</span>
               </div>
             </div> */}
 
-            {/* Mobile Menu Items */}
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center justify-between px-3 py-3 text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                <span className="font-medium">{item.label}</span>
-                {item.hasDropdown && <ChevronDown className="h-4 w-4" />}
-              </Link>
-            ))}
-
-            <div className="flex items-center justify-between px-3 py-3 text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded transition-colors">
-                <Link  className="font-medium" href="/account">My Account</Link>
-            </div>
-
-            {/* Mobile Booking Button */}
-            <div className="pt-3 border-t border-gray-200 flex gap-4">
-              <Button asChild className="flex-1 bg-green-600 hover:bg-green-700">
-                <Link href="/booking">Booking Now</Link>
-              </Button>
-              <Link 
-  href="/ambassador-signup" 
-  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md text-center transition-colors inline-flex items-center justify-center"
->
-  Become Ambassador
-</Link>
-            </div>
-
-
-            {/* Mobile Language & Currency */}
-            {/* <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-              <button className="flex items-center space-x-1 text-sm text-gray-700">
-                <span>English</span>
-                <ChevronDown className="h-4 w-4" />
+            {/* Login/Logout Button */}
+            {user ? (
+              <button onClick={handleLogout} className="hidden lg:inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition font-medium text-sm">
+                <LogOut size={16} />
+                Logout
               </button>
-              <button className="flex items-center space-x-1 text-sm text-gray-700">
-                <span>USD</span>
-                <ChevronDown className="h-4 w-4" />
-              </button> 
-            </div>*/}
+            ) : (
+              <button onClick={onLoginClick} className="hidden lg:inline-flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+                <User size={16} />
+                Login
+              </button>
+            )}
+
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="lg:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
-      )}
-    </nav>
-  )
+
+        {/* Mobile Menu */}
+        <div className={`lg:hidden fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className={`fixed inset-y-0 right-0 max-w-[300px] w-full bg-white shadow-lg transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className="flex flex-col h-full">
+              {/* Mobile Search */}
+              <div className="p-4 border-b">
+                <div className="flex items-center bg-gray-100 rounded-full px-4 py-2">
+                  <input
+                    type="text"
+                    placeholder="Search For Course...."
+                    className="bg-transparent outline-none text-sm w-full"
+                  />
+                  <Search size={18} className="text-gray-400" />
+                </div>
+              </div>
+
+              {/* Navigation Items */}
+              <nav className="flex-1 overflow-y-auto">
+                <div className="flex flex-col p-4">
+                  {navItems.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => scrollToSection(item.sectionId)}
+                      className="flex items-center justify-between py-3 text-gray-800 font-medium hover:text-[#4A90E2] transition border-b border-gray-100"
+                    >
+                      {item.label}
+                      {item.hasDropdown && <ChevronDown size={16} />}
+                    </button>
+                  ))}
+                </div>
+              </nav>
+
+              {/* Mobile Bottom Actions */}
+              <div className="border-t p-4 space-y-4">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <Heart size={20} className="text-[#1C3C68]" />
+                    <span>Wishlist (3)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <ShoppingCart size={20} className="text-[#1C3C68]" />
+                    <span>Cart (5)</span>
+                  </div>
+                </div>
+                {user ? (
+                  <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition font-medium text-sm">
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                ) : (
+                  <button onClick={onLoginClick} className="w-full flex items-center justify-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+                    <User size={16} />
+                    Login / Register
+                  </button>
+                )}
+              </div>
+
+              {/* Close Button */}
+              <button 
+                className="absolute top-4 right-4"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <X size={24} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }
+
+
+ 
