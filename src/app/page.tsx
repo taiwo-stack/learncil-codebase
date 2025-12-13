@@ -7,10 +7,10 @@ import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/components/layout/firebase';
 import HeroSection from '@/components/layout/hero-section'
 import ServicesSection from '@/components/layout/services-section'
-import FeaturedCourses from '@/components/tours/featured-courses'
-import Calltoaction from '@/components/tours/calltoaction'
+import FeaturedCourses from '@/components/courses/featured-courses'
+import Calltoaction from '@/components/courses/calltoaction'
 import FoundersSection from '@/components/layout/founders-section'
-import SpecialCourses from '@/components/tours/special-courses'
+import SpecialCourses from '@/components/courses/special-courses'
 // import Instructors from '@/components/layout/instructors'
 import BookingSection from '@/components/layout/booking'
 // import { BlogSection } from '@/components/blog/blog-section'
