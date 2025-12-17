@@ -1,18 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Images configuration
+  reactStrictMode: true,
+
+  // Image handling
   images: {
-    unoptimized: true, // Disable Next.js image optimization
+    unoptimized: true, // OK for Firebase/Vercel static images
     remotePatterns: [
-      { protocol: 'https', hostname: 'placehold.co' },
-      { protocol: 'https', hostname: 'images.unsplash.com' },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
 
-  // Allowed origins for development
-  allowedDevOrigins: ['10.229.40.13'],
-
-  // Ignore TypeScript and ESLint errors during build
+  // Ignore build blockers (use carefully in production)
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -20,15 +25,10 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  // React strict mode
-  reactStrictMode: true,
+  // Dev-only setting (safe to keep)
+  allowedDevOrigins: ['10.229.40.13'],
 
-  // Optional: future-proof Next.js features
-  experimental: {
-    appDir: true, // Ensure support for /app directory
-  },
-
-  // Do NOT use output: "export" if you need dynamic SSR pages
+ 
 };
 
 module.exports = nextConfig;
