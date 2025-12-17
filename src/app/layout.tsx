@@ -8,7 +8,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import Navbar from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import Auth from '@/components/layout/Auth';
-import FirebaseErrorBoundary from '@/components/firebaseErrorBoundary';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -81,21 +81,19 @@ export default function RootLayout({
         <meta name="keywords" content="education, online courses, learning, teachers, students, e-learning, education platform" />
       </head>
       <body className={inter.className}>
-        <FirebaseErrorBoundary>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="relative flex min-h-screen flex-col">
-              {shouldShowNavbar && <Navbar onLoginClick={() => setShowAuth(true)} />}
-              <main className="flex-1">{children}</main>
-              {showAuth && <Auth onClose={() => setShowAuth(false)} />}
-              {shouldShowFooter && <Footer />}
-            </div>
-          </ThemeProvider>
-        </FirebaseErrorBoundary>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="relative flex min-h-screen flex-col">
+            {shouldShowNavbar && <Navbar onLoginClick={() => setShowAuth(true)} />}
+            <main className="flex-1">{children}</main>
+            {showAuth && <Auth onClose={() => setShowAuth(false)} />}
+            {shouldShowFooter && <Footer />}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
