@@ -33,6 +33,10 @@ export default function HomePage() {
           if (user) {
             // User is logged in, redirect to their dashboard
             try {
+              if (!db) {
+                console.warn('Database not available for user redirect');
+                return;
+              }
               const userDocRef = doc(db, 'users', user.uid);
               const userDoc = await getDoc(userDocRef);
 
