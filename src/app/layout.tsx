@@ -2,32 +2,48 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
-import Navbar from '@/components/layout/navbar'
-import { Footer } from '@/components/layout/footer'
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import Navbar from '@/components/layout/navbar';
+import { Footer } from '@/components/layout/footer';
 import Auth from '@/components/layout/Auth';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/components/layout/firebase';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   const [showAuth, setShowAuth] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user);
-    });
-    return () => unsubscribe();
+    // Dynamically import and initialize Firebase auth
+    const initAuth = async () => {
+      try {
+        const { onAuthStateChanged } = await import('firebase/auth');
+        const { auth } = await import('@/components/layout/firebase');
+
+        // Only proceed if auth is available
+        if (!auth) {
+          console.warn('Firebase auth is not initialized');
+          return;
+        }
+
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          setIsAuthenticated(!!user);
+        });
+
+        return () => unsubscribe();
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      }
+    };
+
+    initAuth();
   }, []);
 
   // Check if current page is a dashboard page
@@ -60,5 +76,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
