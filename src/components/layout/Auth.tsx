@@ -57,6 +57,12 @@ export default function Auth({ onClose }: AuthProps) {
     setMessage('');
     setError('');
 
+    if (!auth) {
+      setError('Authentication service is not available. Please try again later.');
+      setLoading(false);
+      return;
+    }
+
     if (forgotPassword) {
       try {
         await sendPasswordResetEmail(auth, email);
@@ -78,6 +84,12 @@ export default function Auth({ onClose }: AuthProps) {
         return;
       }
 
+      if (!db) {
+        setError('Database service is not available. Please try again later.');
+        setLoading(false);
+        return;
+      }
+
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
@@ -86,6 +98,11 @@ export default function Auth({ onClose }: AuthProps) {
         await user.getIdToken(true);
 
         // Check if user profile exists in Firestore
+        if (!db) {
+          setError('Database service is not available. Please try again later.');
+          setLoading(false);
+          return;
+        }
         const userDocRef = doc(db, 'users', user.uid);
         const userDoc = await getDoc(userDocRef);
 

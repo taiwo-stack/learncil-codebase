@@ -18,6 +18,10 @@ export default function AuthGuard({ children, role }: AuthGuardProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!auth) {
+      console.warn('Firebase auth is not initialized');
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         // If no user is logged in, redirect to the homepage.
@@ -27,6 +31,10 @@ export default function AuthGuard({ children, role }: AuthGuardProps) {
 
       try {
         // Fetch user role from Firestore
+        if (!db) {
+          console.warn('Database not available for user verification');
+          return;
+        }
         const userDocRef = doc(db, 'users', user.uid);
         const userDoc = await getDoc(userDocRef);
 

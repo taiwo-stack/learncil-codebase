@@ -18,6 +18,10 @@ export default function Navbar({ onLoginClick }: NavbarProps) {
   const router = useRouter();
 
   useEffect(() => {
+    if (!auth) {
+      console.warn('Firebase auth is not initialized');
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
@@ -25,8 +29,12 @@ export default function Navbar({ onLoginClick }: NavbarProps) {
   }, []);
 
   const handleLogout = async () => {
+    if (!auth) {
+      console.warn('Firebase auth is not initialized');
+      return;
+    }
     try {
-      await signOut(auth);
+      await signOut(auth as any);
       router.push('/');
     } catch (error) {
       console.error('Error signing out:', error);

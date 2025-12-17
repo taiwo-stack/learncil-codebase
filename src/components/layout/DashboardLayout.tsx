@@ -20,6 +20,10 @@ export default function DashboardLayout({ children, role, uid }: DashboardLayout
   const router = useRouter();
 
   useEffect(() => {
+    if (!auth) {
+      console.warn('Firebase auth is not initialized');
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
@@ -27,9 +31,13 @@ export default function DashboardLayout({ children, role, uid }: DashboardLayout
   }, []);
 
   const handleLogout = async () => {
+    if (!auth) {
+      console.warn('Firebase auth is not initialized');
+      return;
+    }
     setLoggingOut(true);
     try {
-      await signOut(auth);
+      await signOut(auth as any);
       // Force a page reload to ensure clean state transition
       window.location.href = '/';
     } catch (error) {
