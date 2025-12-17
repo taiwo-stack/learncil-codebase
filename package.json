@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "eslint"
-},
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
@@ -26,7 +26,7 @@
     "firebase-admin": "^13.6.0",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
-    "next": "15.5.4",
+    "next": "^16.0.10",
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.6",
     "react": "19.1.0",
