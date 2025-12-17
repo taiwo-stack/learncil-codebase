@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import Navbar from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import Auth from '@/components/layout/Auth';
+import FirebaseErrorBoundary from '@/components/firebaseErrorBoundary';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,9 +19,12 @@ export default function RootLayout({
 }) {
   const [showAuth, setShowAuth] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
+    setMounted(true);
+
     // Dynamically import and initialize Firebase auth
     const initAuth = async () => {
       try {
@@ -53,6 +57,22 @@ export default function RootLayout({
   const shouldShowNavbar = !isDashboardPage || !isAuthenticated;
   const shouldShowFooter = !isDashboardPage || !isAuthenticated;
 
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <title>Learncil | Your Gateway to Quality Education</title>
+          <meta name="description" content="Access high-quality courses, expert teachers, and a supportive learning community. Start your educational journey with Learncil today." />
+          <meta name="keywords" content="education, online courses, learning, teachers, students, e-learning, education platform" />
+        </head>
+        <body className={inter.className}>
+          <div style={{ visibility: 'hidden' }}>{children}</div>
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -61,19 +81,21 @@ export default function RootLayout({
         <meta name="keywords" content="education, online courses, learning, teachers, students, e-learning, education platform" />
       </head>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="relative flex min-h-screen flex-col">
-            {shouldShowNavbar && <Navbar onLoginClick={() => setShowAuth(true)} />}
-            <main className="flex-1">{children}</main>
-            {showAuth && <Auth onClose={() => setShowAuth(false)} />}
-            {shouldShowFooter && <Footer />}
-          </div>
-        </ThemeProvider>
+        <FirebaseErrorBoundary>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="relative flex min-h-screen flex-col">
+              {shouldShowNavbar && <Navbar onLoginClick={() => setShowAuth(true)} />}
+              <main className="flex-1">{children}</main>
+              {showAuth && <Auth onClose={() => setShowAuth(false)} />}
+              {shouldShowFooter && <Footer />}
+            </div>
+          </ThemeProvider>
+        </FirebaseErrorBoundary>
       </body>
     </html>
   );
