@@ -8,6 +8,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 import Navbar from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import Auth from '@/components/layout/Auth';
+import SEO from '@/components/layout/SEO';
+import Analytics from '@/components/layout/Analytics';
+import SpeedOptimization from '@/components/layout/SpeedOptimization';
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -62,9 +65,7 @@ export default function RootLayout({
     return (
       <html lang="en" suppressHydrationWarning>
         <head>
-          <title>Learncil | Your Gateway to Quality Education</title>
-          <meta name="description" content="Access high-quality courses, expert teachers, and a supportive learning community. Start your educational journey with Learncil today." />
-          <meta name="keywords" content="education, online courses, learning, teachers, students, e-learning, education platform" />
+          <SEO />
         </head>
         <body className={inter.className}>
           <div style={{ visibility: 'hidden' }}>{children}</div>
@@ -76,9 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Learncil | Your Gateway to Quality Education</title>
-        <meta name="description" content="Access high-quality courses, expert teachers, and a supportive learning community. Start your educational journey with Learncil today." />
-        <meta name="keywords" content="education, online courses, learning, teachers, students, e-learning, education platform" />
+        <SEO />
       </head>
       <body className={inter.className}>
         <ThemeProvider
@@ -94,6 +93,8 @@ export default function RootLayout({
             {shouldShowFooter && <Footer />}
           </div>
         </ThemeProvider>
+        <Analytics gtagId="G-XXXXXXXXXX" gtmId="GTM-XXXXXXX" />
+        <SpeedOptimization />
       </body>
     </html>
   );
