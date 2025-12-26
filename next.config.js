@@ -52,24 +52,27 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
           }
         ]
       }
     ]
   },
 
-  // Ignore build blockers (use carefully in production)
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-
   // Dev-only setting (safe to keep)
   allowedDevOrigins: ['10.229.40.13'],
 
+  // Additional SEO optimizations
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react'],
+  },
   
+  // Compression
+  compress: true,
 };
 
 module.exports = nextConfig;
