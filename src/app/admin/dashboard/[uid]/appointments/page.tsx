@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/components/layout/firebase'
 
+
 export default function AdminAppointmentsPage() {
   const params = useParams();
   const uid = params.uid as string;

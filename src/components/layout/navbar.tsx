@@ -1,38 +1,30 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, ShoppingCart, Heart, ChevronDown, Phone, Mail, Clock, Menu, X, User, Facebook, Twitter, Linkedin, Youtube, LogOut } from 'lucide-react';
+import { 
+  Search, ShoppingCart, Heart, ChevronDown, Phone, Mail, Clock, 
+  Menu, X, User, Facebook, Twitter, Linkedin, Youtube, LogOut 
+} from 'lucide-react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
 import Link from 'next/link';
 import Image from 'next/image';
 
-interface NavbarProps {
-  onLoginClick?: () => void;
-}
-
-export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
+export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
 
+  // Track Firebase auth state
   useEffect(() => {
-    if (!auth) {
-      console.warn('Firebase auth is not initialized');
-      return;
-    }
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
+    if (!auth) return;
+    const unsubscribe = onAuthStateChanged(auth, (user) => setUser(user));
     return () => unsubscribe();
   }, []);
 
   const handleLogout = async () => {
-    if (!auth) {
-      console.warn('Firebase auth is not initialized');
-      return;
-    }
+    if (!auth) return;
     try {
       await signOut(auth as any);
       router.push('/');
@@ -41,11 +33,14 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
     }
   };
 
+  const handleLoginClick = () => {
+    // Example: redirect to login page
+    router.push('/login');
+  };
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (element) element.scrollIntoView({ behavior: 'smooth' });
   };
 
   const navItems = [
@@ -55,23 +50,22 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
     { label: 'COURSES', hasDropdown: false, sectionId: 'courses' },
     { label: 'TESTIMONIALS', hasDropdown: false, sectionId: 'testimonials' },
     { label: 'BLOG', hasDropdown: false, sectionId: 'blog' },
-    // { label: '', hasDropdown: false }
   ];
 
   return (
     <header className="w-full bg-white shadow-sm">
-  {/* Top Bar */}
-  <div className="bg-[#1C3C68] text-white py-2 px-4">
+      {/* Top Bar */}
+      <div className="bg-[#1C3C68] text-white py-2 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Mobile Top Bar */}
           <div className="md:hidden flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Phone size={14} className="text-white" />
-              <span className="text-xs">+234 906 1814 608</span>
+              <Phone size={14} />
+              <span className="text-xs">+234 706 790 0161</span>
             </div>
             <div className="flex items-center gap-x-3">
-              <a href="#" className="hover:opacity-90 transition-opacity"><Facebook size={14} className="text-white" /></a>
-              <a href="#" className="hover:opacity-90 transition-opacity"><Twitter size={14} className="text-white" /></a>
+              <a href="#"><Facebook size={14} /></a>
+              <a href="#"><Twitter size={14} /></a>
             </div>
           </div>
 
@@ -79,26 +73,26 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
           <div className="hidden md:flex justify-between items-center text-xs">
             <div className="flex items-center gap-x-6">
               <div className="flex items-center gap-2">
-                <Phone size={14} className="text-white" />
+                <Phone size={14} />
                 <span>+234 906 1814 608</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail size={14} className="text-white" />
+                <Mail size={14} />
                 <span>info@learncil.com</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock size={14} className="text-white" />
+                <Clock size={14} />
                 <span>Mon - Sat: 8:00 - 15:00</span>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-x-4">
               <span>Follow Us:</span>
               <div className="flex gap-x-3">
-                <a href="#" className="hover:opacity-90 transition-opacity"><Facebook size={16} className="text-white" /></a>
-                <a href="#" className="hover:opacity-90 transition-opacity"><Twitter size={16} className="text-white" /></a>
-                <a href="#" className="hover:opacity-90 transition-opacity"><Linkedin size={16} className="text-white" /></a>
-                <a href="#" className="hover:opacity-90 transition-opacity"><Youtube size={16} className="text-white" /></a>
+                <a href="#"><Facebook size={16} /></a>
+                <a href="#"><Twitter size={16} /></a>
+                <a href="#"><Linkedin size={16} /></a>
+                <a href="#"><Youtube size={16} /></a>
               </div>
             </div>
           </div>
@@ -110,14 +104,14 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4">
-              <Image
-                src="/logolearcil.png"
-                alt="Learncil Logo"
-                width={150}
-                height={50}
-                className="h-10 sm:h-12 w-auto"
-                priority
-              />
+            <Image
+              src="/logolearcil.png"
+              alt="Learncil Logo"
+              width={150}
+              height={50}
+              className="h-10 sm:h-12 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -142,7 +136,6 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-x-4 ml-auto">
-            {/* Search Bar */}
             <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-64">
               <input
                 type="text"
@@ -152,28 +145,14 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
               <Search size={18} className="text-gray-400" />
             </div>
 
-            {/* Icons */}
-            {/* <div className="hidden sm:flex items-center gap-x-4">
-              <div className="relative cursor-pointer">
-                <Heart size={22} className="text-[#1C3C68]" />
-                <span className="absolute -top-2 -right-2 bg-[#4A90E2] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
-              </div>
-              <div className="relative cursor-pointer">
-                <ShoppingCart size={22} className="text-[#1C3C68]" />
-                <span className="absolute -top-2 -right-2 bg-[#4A90E2] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">5</span>
-              </div>
-            </div> */}
-
-            {/* Login/Logout Button */}
+            {/* Login / Logout */}
             {user ? (
               <button onClick={handleLogout} className="hidden lg:inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition font-medium text-sm">
-                <LogOut size={16} />
-                Logout
+                <LogOut size={16} /> Logout
               </button>
             ) : (
-              <button onClick={onLoginClick} className="hidden lg:inline-flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
-                <User size={16} />
-                Login
+              <button onClick={handleLoginClick} className="hidden lg:inline-flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+                <User size={16} /> Login
               </button>
             )}
 
@@ -233,13 +212,11 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
                 </div>
                 {user ? (
                   <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition font-medium text-sm">
-                    <LogOut size={16} />
-                    Logout
+                    <LogOut size={16} /> Logout
                   </button>
                 ) : (
-                  <button onClick={onLoginClick} className="w-full flex items-center justify-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
-                    <User size={16} />
-                    Login / Register
+                  <button onClick={handleLoginClick} className="w-full flex items-center justify-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+                    <User size={16} /> Login / Register
                   </button>
                 )}
               </div>
@@ -258,6 +235,3 @@ export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
     </header>
   );
 }
-
-
- 

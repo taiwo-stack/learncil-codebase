@@ -84,12 +84,12 @@ export function Footer() {
               <div className="flex items-center gap-2 text-sm">
                 <Phone className="w-4 h-4 text-blue-300 flex-shrink-0" />
                 <a href="tel:+234 7067900116" className="hover:text-blue-300 transition-colors">
-                  684 555-0102 490
+                  +234 706 790 0161
                 </a>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                <span>6391 Elgin St. Celina, NYC 10299</span>
+                <span> Zone 1, 1 Dakar St, Wuse 904101, Abuja, Nigeria</span>
               </div>
             </div>
           </div>
@@ -186,23 +186,23 @@ export function Footer() {
             {/* Social Links */}
             <div className="flex items-center gap-3 mt-6">
               <a
-                href="https://facebook.com/learncil"
+                href="https://www.facebook.com/share/178xxmY14n/?mibextid=wwXIfr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"
               >
                 <Facebook className="w-5 h-5" />
               </a>
-              <a
+              {/* <a
                 href="https://twitter.com/learncil"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"
               >
                 <Twitter className="w-5 h-5" />
-              </a>
+              </a> */}
               <a
-                href="https://instagram.com/learncil"
+                href="https://www.instagram.com/learncilacademy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"
@@ -210,7 +210,7 @@ export function Footer() {
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com/company/learncil"
+                href=" https://www.linkedin.com/company/learncil-academy/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"

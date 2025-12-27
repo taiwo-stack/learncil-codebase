@@ -1,3 +1,4 @@
+// /app/blog/[id]/page.tsx
 import BlogPostPage from "@/components/blog/blog-post"
 import { notFound } from "next/navigation"
 
@@ -9,6 +10,7 @@ interface PageProps {
   }
 }
 
+// Server Component
 export default function BlogPost({ params }: PageProps) {
   if (!validBlogIds.includes(params.id)) {
     notFound()
@@ -17,8 +19,3 @@ export default function BlogPost({ params }: PageProps) {
   return <BlogPostPage postId={params.id} />
 }
 
-export async function generateStaticParams() {
-  return validBlogIds.map((id) => ({
-    id: id,
-  }))
-}
