@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { Inter } from 'next/font/google';
+import Head from 'next/head';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Navbar from '@/components/layout/navbar';
@@ -11,7 +12,6 @@ import Auth from '@/components/layout/Auth';
 import SEO from '@/components/layout/SEO';
 import Analytics from '@/components/layout/Analytics';
 import SpeedOptimization from '@/components/layout/SpeedOptimization';
-
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -65,6 +65,28 @@ export default function RootLayout({
     return (
       <html lang="en" suppressHydrationWarning>
         <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="description" content="Transform your learning journey with Learncil. Access expert-led courses, personalized instruction, and comprehensive educational resources designed for students of all levels." />
+          <meta name="keywords" content="online learning, courses, education, e-learning, tutorials, student learning, learncil" />
+          <meta name="author" content="Learncil" />
+          <meta name="robots" content="index, follow" />
+          
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://learncil.com/" />
+          <meta property="og:title" content="Learncil - Online Learning Platform" />
+          <meta property="og:description" content="Transform your learning journey with expert-led courses and personalized instruction." />
+          <meta property="og:site_name" content="Learncil" />
+          
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:url" content="https://learncil.com/" />
+          <meta name="twitter:title" content="Learncil - Online Learning Platform" />
+          <meta name="twitter:description" content="Transform your learning journey with expert-led courses and personalized instruction." />
+          
+          <title>Learncil - Online Learning Platform</title>
+          <link rel="canonical" href="https://learncil.com/" />
           <SEO />
         </head>
         <body className={inter.className}>
@@ -77,6 +99,28 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Transform your learning journey with Learncil. Access expert-led courses, personalized instruction, and comprehensive educational resources designed for students of all levels." />
+        <meta name="keywords" content="online learning, courses, education, e-learning, tutorials, student learning, learncil" />
+        <meta name="author" content="Learncil" />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://learncil.com/" />
+        <meta property="og:title" content="Learncil - Online Learning Platform" />
+        <meta property="og:description" content="Transform your learning journey with expert-led courses and personalized instruction." />
+        <meta property="og:site_name" content="Learncil" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://learncil.com/" />
+        <meta name="twitter:title" content="Learncil - Online Learning Platform" />
+        <meta name="twitter:description" content="Transform your learning journey with expert-led courses and personalized instruction." />
+        
+        <title>Learncil - Online Learning Platform</title>
+        <link rel="canonical" href="https://learncil.com/" />
         <SEO />
       </head>
       <body className={inter.className}>

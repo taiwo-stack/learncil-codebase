@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { collection, query, getDocs, doc, updateDoc, orderBy, where } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from '@/components/layout/firebase';
 import { Calendar, Clock, User, Mail, Phone, Edit, CheckCircle, XCircle, AlertCircle, Filter, Search, UserCheck, UserX } from 'lucide-react';
 
 interface Appointment {
@@ -55,6 +55,11 @@ export default function AdminAppointmentManagement() {
   }, [appointments, searchTerm, statusFilter, dateFilter]);
 
   const fetchAllAppointments = async () => {
+    if (!db) {
+      console.error('Firestore not initialized');
+      setLoading(false);
+      return;
+    }
     try {
       const appointmentsRef = collection(db, 'appointments');
       const q = query(appointmentsRef, orderBy('createdAt', 'desc'));
@@ -80,6 +85,10 @@ export default function AdminAppointmentManagement() {
   };
 
   const fetchInstructors = async () => {
+    if (!db) {
+      console.error('Firestore not initialized');
+      return;
+    }
     try {
       const usersRef = collection(db, 'users');
       const q = query(usersRef, where('role', '==', 'instructor'));
@@ -146,6 +155,10 @@ export default function AdminAppointmentManagement() {
   };
 
   const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
+    if (!db) {
+      console.error('Firestore not initialized');
+      return;
+    }
     try {
       const appointmentRef = doc(db, 'appointments', appointmentId);
       await updateDoc(appointmentRef, {
@@ -163,6 +176,10 @@ export default function AdminAppointmentManagement() {
   };
 
   const assignInstructor = async (appointmentId: string, instructorId: string) => {
+    if (!db) {
+      console.error('Firestore not initialized');
+      return;
+    }
     try {
       const appointmentRef = doc(db, 'appointments', appointmentId);
       await updateDoc(appointmentRef, {
@@ -174,14 +191,16 @@ export default function AdminAppointmentManagement() {
           apt.id === appointmentId ? { ...apt, assignedInstructor: instructorId } : apt
         )
       );
-      setShowAssignModal(false);
-      setSelectedAppointment(null);
     } catch (error) {
       console.error('Error assigning instructor:', error);
     }
   };
 
   const unassignInstructor = async (appointmentId: string) => {
+    if (!db) {
+      console.error('Firestore not initialized');
+      return;
+    }
     try {
       const appointmentRef = doc(db, 'appointments', appointmentId);
       await updateDoc(appointmentRef, {
