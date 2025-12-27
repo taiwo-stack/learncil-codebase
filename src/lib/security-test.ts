@@ -1,14 +1,9 @@
-/**
- * Security Test Utility
- * This file contains functions to test the security implementation
- * Run these tests to verify that the strict Firestore rules and AuthGuard work correctly
- */
-
-import { auth, db } from '@/components/layout/firebase';
-import { collection, query, where, getDocs, addDoc, doc, setDoc, getDoc } from 'firebase/firestore';
+// src/lib/security-test.ts
+import { auth } from '@/components/layout/firebase';
+import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { db } from '@/components/layout/firebase';
 
-// Test user credentials (these should be created by admin first)
 const TEST_USERS = {
   admin: { email: 'test.admin@learncil.com', password: 'testpass123' },
   instructor: { email: 'test.instructor@learncil.com', password: 'testpass123' },
@@ -16,6 +11,12 @@ const TEST_USERS = {
 };
 
 export class SecurityTester {
+  private static assertAuth(): void {
+    if (!auth) {
+      throw new Error("Firebase Auth is not initialized. Make sure you're running this in the browser.");
+    }
+  }
+
   static async testFirestoreRules() {
     console.log('🧪 Testing Firestore Security Rules...\n');
 
@@ -36,11 +37,10 @@ export class SecurityTester {
         const snapshot = await getDocs(q);
         console.log(`✅ Instructor can read ${snapshot.size} of their assignments`);
 
-        // Try to read all assignments (should fail)
         try {
           const allAssignments = await getDocs(assignmentsRef);
           console.log(`❌ Instructor should not read all ${allAssignments.size} assignments`);
-        } catch (error) {
+        } catch {
           console.log('✅ Instructor correctly blocked from reading all assignments');
         }
       });
@@ -57,62 +57,60 @@ export class SecurityTester {
       // Test 4: Only admin can create courses
       console.log('\nTest 4: Course creation permissions');
       await this.testAsAdmin(async () => {
-        try {
-          const coursesRef = collection(db, 'courses');
-          await addDoc(coursesRef, {
-            title: 'Security Test Course',
-            description: 'Test course for security validation',
-            category: 'Security',
-            price: 0,
-            duration: '1 hour',
-            level: 'beginner',
-            status: 'draft',
-            outcome: 'Learn security testing',
-            enrolledStudents: 0,
-            rating: 0,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          });
-          console.log('✅ Admin can create courses');
-        } catch (error: any) {
-          console.log('❌ Admin cannot create courses:', error.message);
-        }
+        const coursesRef = collection(db, 'courses');
+        await addDoc(coursesRef, {
+          title: 'Security Test Course',
+          description: 'Test course for security validation',
+          category: 'Security',
+          price: 0,
+          duration: '1 hour',
+          level: 'beginner',
+          status: 'draft',
+          outcome: 'Learn security testing',
+          enrolledStudents: 0,
+          rating: 0,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+        console.log('✅ Admin can create courses');
       });
 
       console.log('\n🎉 Security tests completed!');
-
     } catch (error) {
       console.error('❌ Security test failed:', error);
     }
   }
 
   private static async testAsAdmin(testFn: () => Promise<void>) {
+    this.assertAuth();
     try {
-      await signInWithEmailAndPassword(auth, TEST_USERS.admin.email, TEST_USERS.admin.password);
+      await signInWithEmailAndPassword(auth!, TEST_USERS.admin.email, TEST_USERS.admin.password);
       await testFn();
-      await signOut(auth);
+      await signOut(auth!);
     } catch (error) {
-      console.log('❌ Cannot test as admin - user may not exist or credentials invalid');
+      console.log('❌ Cannot test as admin - check credentials or initialization.');
     }
   }
 
   private static async testAsInstructor(testFn: (user: any) => Promise<void>) {
+    this.assertAuth();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, TEST_USERS.instructor.email, TEST_USERS.instructor.password);
-      await testFn(userCredential.user);
-      await signOut(auth);
+      const cred = await signInWithEmailAndPassword(auth!, TEST_USERS.instructor.email, TEST_USERS.instructor.password);
+      await testFn(cred.user);
+      await signOut(auth!);
     } catch (error) {
-      console.log('❌ Cannot test as instructor - user may not exist or credentials invalid');
+      console.log('❌ Cannot test as instructor - check credentials or initialization.');
     }
   }
 
   private static async testAsStudent(testFn: (user: any) => Promise<void>) {
+    this.assertAuth();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, TEST_USERS.student.email, TEST_USERS.student.password);
-      await testFn(userCredential.user);
-      await signOut(auth);
+      const cred = await signInWithEmailAndPassword(auth!, TEST_USERS.student.email, TEST_USERS.student.password);
+      await testFn(cred.user);
+      await signOut(auth!);
     } catch (error) {
-      console.log('❌ Cannot test as student - user may not exist or credentials invalid');
+      console.log('❌ Cannot test as student - check credentials or initialization.');
     }
   }
 
@@ -123,7 +121,7 @@ export class SecurityTester {
   }
 }
 
-// Export for use in browser console or test files
+// Expose for browser console usage
 if (typeof window !== 'undefined') {
   (window as any).SecurityTester = SecurityTester;
 }

@@ -6,7 +6,7 @@ import AppointmentManagement from '@/components/layout/AppointmentManagement';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/components/layout/firebase';
+import { db } from '@/components/layout/firebase'
 
 export default function AdminAppointmentsPage() {
   const params = useParams();

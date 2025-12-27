@@ -1,169 +1,59 @@
-"use client"
-
-import { useState } from "react"
-import { 
-  MapPin, Heart, Shield, Users, Award, Globe, 
-  Camera, Compass, Star, Sparkles, ArrowRight,
-  CheckCircle2, Target, Eye, Leaf, HandHeart, 
-  Building2, ChevronRight
-} from "lucide-react"
-import SEO from "@/components/layout/SEO"
+import { Metadata } from 'next';
 import Breadcrumbs from "@/components/layout/Breadcrumbs"
 
-interface Stat {
-  number: string
-  label: string
-  icon: any
-}
-
-interface Value {
-  icon: any
-  title: string
-  description: string
-}
-
-interface TeamMember {
-  name: string
-  role: string
-  image: string
-  bio: string
-}
-
-interface Milestone {
-  year: string
-  event: string
-  description: string
-  icon: any
-}
+export const metadata: Metadata = {
+  title: {
+    default: "About BoxOutcity | Premium Travel & Tourism Services",
+    template: "%s | BoxOutcity"
+  },
+  description: "Discover our story, mission, and values. BoxOutcity is a licensed travel company offering authentic experiences across Nigeria and West Africa since 2020.",
+  keywords: ["about boxoutcity", "travel company", "nigeria tourism", "west africa tours", "travel agency", "tour operator"],
+  openGraph: {
+    type: 'website',
+    locale: 'en_NG',
+    url: 'https://learncil.com/about',
+    title: 'About BoxOutcity - Your Trusted Travel Partner',
+    description: 'Learn about our journey, team, and commitment to authentic travel experiences in West Africa',
+    siteName: 'BoxOutcity',
+    images: [
+      {
+        url: '/about_leancil_1.png',
+        width: 1200,
+        height: 630,
+        alt: 'About BoxOutcity - Our Story',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About BoxOutcity - Premium Travel Experiences',
+    description: 'Discover our story and passion for travel',
+    images: ['/about_leancil_1.png'],
+    site: '@learncil',
+    creator: '@learncil',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://learncil.com/about',
+  },
+  verification: {
+    google: 'your-google-site-verification-code',
+  }
+};
 
 export default function AboutUsPage() {
-  const [activeValue, setActiveValue] = useState<number>(0)
-
-  const stats: Stat[] = [
-    { number: "500+", label: "Happy Travelers", icon: Users },
-    { number: "50+", label: "Tour Destinations", icon: MapPin },
-    { number: "100+", label: "Tours Completed", icon: CheckCircle2 },
-    { number: "4.9", label: "Average Rating", icon: Star }
-  ]
-
-  const values: Value[] = [
-    {
-      icon: Heart,
-      title: "Authentic Experiences",
-      description: "We create genuine connections with local cultures, taking you beyond tourist spots to experience the real heart of each destination."
-    },
-    {
-      icon: Shield,
-      title: "Safety First",
-      description: "Your security is our priority. We maintain the highest safety standards with licensed guides, insured vehicles, and 24/7 support."
-    },
-    {
-      icon: Users,
-      title: "Community Impact",
-      description: "We partner with local communities, ensuring tourism benefits the people and places you visit through sustainable practices."
-    },
-    {
-      icon: Leaf,
-      title: "Sustainable Travel",
-      description: "We're committed to eco-friendly tourism that preserves natural beauty and cultural heritage for future generations."
-    }
-  ]
-
-  const team: TeamMember[] = [
-    {
-      name: "Adewale Johnson",
-      role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-      bio: "Passionate traveler with 10+ years of experience in tourism"
-    },
-    {
-      name: "Chioma Okafor",
-      role: "Head of Operations",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-      bio: "Expert in logistics and customer experience management"
-    },
-    {
-      name: "Ibrahim Musa",
-      role: "Lead Tour Guide",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
-      bio: "Cultural ambassador and storyteller extraordinaire"
-    },
-    {
-      name: "Funmi Adeleke",
-      role: "Marketing Director",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
-      bio: "Creative strategist connecting travelers with adventures"
-    }
-  ]
-
-  const milestones: Milestone[] = [
-    { 
-      year: "2020", 
-      event: "BoxOutcity Founded", 
-      description: "Started with a dream to showcase Nigeria's beauty",
-      icon: Building2
-    },
-    { 
-      year: "2021", 
-      event: "First 100 Tours", 
-      description: "Reached milestone of 100 successful tours",
-      icon: CheckCircle2
-    },
-    { 
-      year: "2022", 
-      event: "Regional Expansion", 
-      description: "Extended services across West Africa",
-      icon: Globe
-    },
-    { 
-      year: "2023", 
-      event: "Ambassador Program", 
-      description: "Launched community-driven growth initiative",
-      icon: Users
-    },
-    { 
-      year: "2024", 
-      event: "500+ Happy Travelers", 
-      description: "Celebrated serving over 500 satisfied customers",
-      icon: Award
-    }
-  ]
-
   return (
     <>
-      <SEO 
-        title="About BoxOutcity | Premium Travel & Tourism Services"
-        description="Discover our story, mission, and values. BoxOutcity is a licensed travel company offering authentic experiences across Nigeria and West Africa since 2020."
-        keywords="about boxoutcity, travel company, nigeria tourism, west africa tours, travel agency, tour operator"
-        canonical="https://learncil.com/about"
-        ogTitle="About BoxOutcity - Your Trusted Travel Partner"
-        ogDescription="Learn about our journey, team, and commitment to authentic travel experiences in West Africa"
-        ogImage="https://learncil.com/about_leancil_1.png"
-        ogType="website"
-        twitterCard="summary_large_image"
-        twitterTitle="About BoxOutcity - Premium Travel Experiences"
-        twitterDescription="Discover our story and passion for travel"
-        twitterImage="https://learncil.com/about_leancil_1.png"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "AboutPage",
-          "name": "About BoxOutcity",
-          "url": "https://learncil.com/about",
-          "description": "Learn about BoxOutcity's mission, vision, values, and team dedicated to providing exceptional travel experiences.",
-          "mainEntity": {
-            "@type": "Organization",
-            "name": "BoxOutcity",
-            "foundingDate": "2020",
-            "description": "Premium travel company offering tours across Nigeria and West Africa",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Lagos",
-              "addressCountry": "NG"
-            }
-          }
-        }}
-      />
-      
       <Breadcrumbs />
       
       <div className="min-h-screen bg-white">
@@ -181,16 +71,26 @@ export default function AboutUsPage() {
 
           {/* Floating Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <Compass className="absolute top-20 left-10 w-16 h-16 text-emerald-300/20 animate-spin-slow" style={{animation: 'spin 20s linear infinite'}} />
-            <MapPin className="absolute top-40 right-20 w-12 h-12 text-emerald-300/20 animate-bounce" />
-            <Star className="absolute bottom-32 left-32 w-8 h-8 text-emerald-300/20 animate-pulse" />
-            <Camera className="absolute bottom-20 right-40 w-10 h-10 text-emerald-300/20" style={{animation: 'bounce 3s ease-in-out infinite'}} />
+            <svg className="absolute top-20 left-10 w-16 h-16 text-emerald-300/20 animate-spin-slow" style={{animation: 'spin 20s linear infinite'}} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg className="absolute top-40 right-20 w-12 h-12 text-emerald-300/20 animate-bounce" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <svg className="absolute bottom-32 left-32 w-8 h-8 text-emerald-300/20 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+            <svg className="absolute bottom-20 right-40 w-10 h-10 text-emerald-300/20" style={{animation: 'bounce 3s ease-in-out infinite'}} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
           </div>
 
           {/* Content */}
           <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 mb-6">
-              <Sparkles className="w-5 h-5 text-emerald-300" />
+              <svg className="w-5 h-5 text-emerald-300" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
               <span className="text-white font-medium">Your Journey Starts Here</span>
             </div>
             
@@ -208,7 +108,9 @@ export default function AboutUsPage() {
                 className="group bg-white text-emerald-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-emerald-50 transition-all inline-flex items-center gap-2 shadow-xl hover:shadow-2xl hover:scale-105"
               >
                 Explore Our Tours
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
               </a>
               <a 
                 href="/contact"
@@ -224,19 +126,37 @@ export default function AboutUsPage() {
         <section className="py-16 -mt-20 relative z-20">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {stats.map((stat, index) => {
-                const Icon = stat.icon
-                return (
-                  <div
-                    key={index}
-                    className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all hover:-translate-y-1"
-                  >
-                    <Icon className="w-10 h-10 text-emerald-600 mb-4 mx-auto" />
-                    <div className="text-4xl font-bold text-gray-900 mb-2">{stat.number}</div>
-                    <div className="text-gray-600 font-medium">{stat.label}</div>
-                  </div>
-                )
-              })}
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all hover:-translate-y-1">
+                <svg className="w-10 h-10 text-emerald-600 mb-4 mx-auto" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <div className="text-4xl font-bold text-gray-900 mb-2">500+</div>
+                <div className="text-gray-600 font-medium">Happy Travelers</div>
+              </div>
+              
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all hover:-translate-y-1">
+                <svg className="w-10 h-10 text-emerald-600 mb-4 mx-auto" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <div className="text-4xl font-bold text-gray-900 mb-2">50+</div>
+                <div className="text-gray-600 font-medium">Tour Destinations</div>
+              </div>
+              
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all hover:-translate-y-1">
+                <svg className="w-10 h-10 text-emerald-600 mb-4 mx-auto" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <div className="text-4xl font-bold text-gray-900 mb-2">100+</div>
+                <div className="text-gray-600 font-medium">Tours Completed</div>
+              </div>
+              
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all hover:-translate-y-1">
+                <svg className="w-10 h-10 text-emerald-600 mb-4 mx-auto" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+                <div className="text-4xl font-bold text-gray-900 mb-2">4.9</div>
+                <div className="text-gray-600 font-medium">Average Rating</div>
+              </div>
             </div>
           </div>
         </section>
@@ -269,7 +189,9 @@ export default function AboutUsPage() {
                 </p>
 
                 <div className="flex items-center gap-4 pt-4">
-                  <Award className="w-12 h-12 text-emerald-600" />
+                  <svg className="w-12 h-12 text-emerald-600" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
                   <div>
                     <div className="font-bold text-gray-900">Licensed & Certified</div>
                     <div className="text-gray-600">Recognized by Nigeria Tourism Board</div>
@@ -291,7 +213,9 @@ export default function AboutUsPage() {
                 <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-2xl max-w-xs">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center">
-                      <Heart className="w-8 h-8 text-emerald-600" />
+                      <svg className="w-8 h-8 text-emerald-600" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
                     </div>
                     <div>
                       <div className="font-bold text-gray-900 text-2xl">4.9/5</div>
@@ -320,7 +244,9 @@ export default function AboutUsPage() {
               {/* Vision */}
               <div className="bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-100 hover:shadow-2xl transition-all">
                 <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center mb-6">
-                  <Eye className="w-8 h-8 text-white" />
+                  <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                  </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
@@ -331,7 +257,9 @@ export default function AboutUsPage() {
               {/* Mission */}
               <div className="bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-100 hover:shadow-2xl transition-all">
                 <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center mb-6">
-                  <Target className="w-8 h-8 text-white" />
+                  <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
@@ -358,22 +286,57 @@ export default function AboutUsPage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {values.map((value, index) => {
-                const Icon = value.icon
-                return (
-                  <div
-                    key={index}
-                    className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all cursor-pointer"
-                    onMouseEnter={() => setActiveValue(index)}
-                  >
-                    <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition-colors">
-                      <Icon className="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{value.description}</p>
-                  </div>
-                )
-              })}
+              {/* Value 1 */}
+              <div className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all cursor-pointer">
+                <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition-colors">
+                  <svg className="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Authentic Experiences</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  We create genuine connections with local cultures, taking you beyond tourist spots to experience the real heart of each destination.
+                </p>
+              </div>
+
+              {/* Value 2 */}
+              <div className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all cursor-pointer">
+                <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition-colors">
+                  <svg className="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Safety First</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Your security is our priority. We maintain the highest safety standards with licensed guides, insured vehicles, and 24/7 support.
+                </p>
+              </div>
+
+              {/* Value 3 */}
+              <div className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all cursor-pointer">
+                <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition-colors">
+                  <svg className="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.01 2.01 0 0 0 18 6.52l-2.25 4.45H13v6h3v-4.52l2.5-1.25V22h3z"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Community Impact</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  We partner with local communities, ensuring tourism benefits the people and places you visit through sustainable practices.
+                </p>
+              </div>
+
+              {/* Value 4 */}
+              <div className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all cursor-pointer">
+                <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition-colors">
+                  <svg className="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.5 6h-11c-.83 0-1.5.67-1.5 1.5v9c0 .83.67 1.5 1.5 1.5h11c.83 0 1.5-.67 1.5-1.5v-9c0-.83-.67-1.5-1.5-1.5zm-11 1.5c.28 0 .5.22.5.5s-.22.5-.5.5-.5-.22-.5-.5.22-.5.5-.5zm0 9c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5zm11-9h-2V8h-1.5V6.5h-5V8H9V6.5H7.5V8h-2v-2C6.93 6 8.07 6 9.5 6h5c1.43 0 2.57 0 4 0zM7.5 16c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5zm11 0c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5z"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Sustainable Travel</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  We're committed to eco-friendly tourism that preserves natural beauty and cultural heritage for future generations.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -395,32 +358,125 @@ export default function AboutUsPage() {
               <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-emerald-200"></div>
 
               <div className="space-y-12">
-                {milestones.map((milestone, index) => {
-                  const Icon = milestone.icon
-                  const isEven = index % 2 === 0
-                  return (
-                    <div key={index} className={`flex items-center gap-8 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                      {/* Content */}
-                      <div className={`flex-1 ${isEven ? 'md:text-right' : 'md:text-left'}`}>
-                        <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all inline-block">
-                          <div className="text-emerald-600 font-bold text-lg mb-2">{milestone.year}</div>
-                          <h4 className="text-xl font-bold text-gray-900 mb-2">{milestone.event}</h4>
-                          <p className="text-gray-600">{milestone.description}</p>
-                        </div>
-                      </div>
-
-                      {/* Icon Circle */}
-                      <div className="relative z-10 flex-shrink-0">
-                        <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shadow-xl">
-                          <Icon className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-
-                      {/* Spacer for even layout */}
-                      <div className="flex-1 hidden md:block"></div>
+                {/* Milestone 1 */}
+                <div className="flex items-center gap-8 md:flex-row">
+                  {/* Content */}
+                  <div className="flex-1 md:text-right">
+                    <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all inline-block">
+                      <div className="text-emerald-600 font-bold text-lg mb-2">2020</div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">BoxOutcity Founded</h4>
+                      <p className="text-gray-600">Started with a dream to showcase Nigeria's beauty</p>
                     </div>
-                  )
-                })}
+                  </div>
+
+                  {/* Icon Circle */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shadow-xl">
+                      <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Spacer for even layout */}
+                  <div className="flex-1 hidden md:block"></div>
+                </div>
+
+                {/* Milestone 2 */}
+                <div className="flex items-center gap-8 md:flex-row-reverse">
+                  {/* Content */}
+                  <div className="flex-1 md:text-left">
+                    <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all inline-block">
+                      <div className="text-emerald-600 font-bold text-lg mb-2">2021</div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">First 100 Tours</h4>
+                      <p className="text-gray-600">Reached milestone of 100 successful tours</p>
+                    </div>
+                  </div>
+
+                  {/* Icon Circle */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shadow-xl">
+                      <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Spacer for even layout */}
+                  <div className="flex-1 hidden md:block"></div>
+                </div>
+
+                {/* Milestone 3 */}
+                <div className="flex items-center gap-8 md:flex-row">
+                  {/* Content */}
+                  <div className="flex-1 md:text-right">
+                    <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all inline-block">
+                      <div className="text-emerald-600 font-bold text-lg mb-2">2022</div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">Regional Expansion</h4>
+                      <p className="text-gray-600">Extended services across West Africa</p>
+                    </div>
+                  </div>
+
+                  {/* Icon Circle */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shadow-xl">
+                      <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Spacer for even layout */}
+                  <div className="flex-1 hidden md:block"></div>
+                </div>
+
+                {/* Milestone 4 */}
+                <div className="flex items-center gap-8 md:flex-row-reverse">
+                  {/* Content */}
+                  <div className="flex-1 md:text-left">
+                    <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all inline-block">
+                      <div className="text-emerald-600 font-bold text-lg mb-2">2023</div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">Ambassador Program</h4>
+                      <p className="text-gray-600">Launched community-driven growth initiative</p>
+                    </div>
+                  </div>
+
+                  {/* Icon Circle */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shadow-xl">
+                      <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.01 2.01 0 0 0 18 6.52l-2.25 4.45H13v6h3v-4.52l2.5-1.25V22h3z"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Spacer for even layout */}
+                  <div className="flex-1 hidden md:block"></div>
+                </div>
+
+                {/* Milestone 5 */}
+                <div className="flex items-center gap-8 md:flex-row">
+                  {/* Content */}
+                  <div className="flex-1 md:text-right">
+                    <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200 hover:border-emerald-500 hover:shadow-xl transition-all inline-block">
+                      <div className="text-emerald-600 font-bold text-lg mb-2">2024</div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">500+ Happy Travelers</h4>
+                      <p className="text-gray-600">Celebrated serving over 500 satisfied customers</p>
+                    </div>
+                  </div>
+
+                  {/* Icon Circle */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shadow-xl">
+                      <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Spacer for even layout */}
+                  <div className="flex-1 hidden md:block"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -442,26 +498,73 @@ export default function AboutUsPage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {team.map((member, index) => (
-                <div
-                  key={index}
-                  className="group bg-white rounded-3xl overflow-hidden border-2 border-gray-200 hover:border-emerald-500 hover:shadow-2xl transition-all"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  </div>
-                  <div className="p-6 text-center">
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h4>
-                    <p className="text-emerald-600 font-semibold mb-3">{member.role}</p>
-                    <p className="text-gray-600 text-sm">{member.bio}</p>
-                  </div>
+              {/* Team Member 1 */}
+              <div className="group bg-white rounded-3xl overflow-hidden border-2 border-gray-200 hover:border-emerald-500 hover:shadow-2xl transition-all">
+                <div className="relative overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+                    alt="Adewale Johnson"
+                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-              ))}
+                <div className="p-6 text-center">
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Adewale Johnson</h4>
+                  <p className="text-emerald-600 font-semibold mb-3">Founder & CEO</p>
+                  <p className="text-gray-600 text-sm">Passionate traveler with 10+ years of experience in tourism</p>
+                </div>
+              </div>
+
+              {/* Team Member 2 */}
+              <div className="group bg-white rounded-3xl overflow-hidden border-2 border-gray-200 hover:border-emerald-500 hover:shadow-2xl transition-all">
+                <div className="relative overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
+                    alt="Chioma Okafor"
+                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div className="p-6 text-center">
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Chioma Okafor</h4>
+                  <p className="text-emerald-600 font-semibold mb-3">Head of Operations</p>
+                  <p className="text-gray-600 text-sm">Expert in logistics and customer experience management</p>
+                </div>
+              </div>
+
+              {/* Team Member 3 */}
+              <div className="group bg-white rounded-3xl overflow-hidden border-2 border-gray-200 hover:border-emerald-500 hover:shadow-2xl transition-all">
+                <div className="relative overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"
+                    alt="Ibrahim Musa"
+                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div className="p-6 text-center">
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Ibrahim Musa</h4>
+                  <p className="text-emerald-600 font-semibold mb-3">Lead Tour Guide</p>
+                  <p className="text-gray-600 text-sm">Cultural ambassador and storyteller extraordinaire</p>
+                </div>
+              </div>
+
+              {/* Team Member 4 */}
+              <div className="group bg-white rounded-3xl overflow-hidden border-2 border-gray-200 hover:border-emerald-500 hover:shadow-2xl transition-all">
+                <div className="relative overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop"
+                    alt="Funmi Adeleke"
+                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div className="p-6 text-center">
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Funmi Adeleke</h4>
+                  <p className="text-emerald-600 font-semibold mb-3">Marketing Director</p>
+                  <p className="text-gray-600 text-sm">Creative strategist connecting travelers with adventures</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -486,7 +589,9 @@ export default function AboutUsPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                <HandHeart className="w-12 h-12 text-emerald-200 mb-6" />
+                <svg className="w-12 h-12 text-emerald-200 mb-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
                 <h3 className="text-2xl font-bold text-white mb-4">Local Partnerships</h3>
                 <p className="text-emerald-100">
                   We work directly with local communities, ensuring your travel supports authentic experiences and economic growth.
@@ -494,7 +599,9 @@ export default function AboutUsPage() {
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                <Shield className="w-12 h-12 text-emerald-200 mb-6" />
+                <svg className="w-12 h-12 text-emerald-200 mb-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                </svg>
                 <h3 className="text-2xl font-bold text-white mb-4">24/7 Support</h3>
                 <p className="text-emerald-100">
                   Our team is always available to assist you before, during, and after your journey for complete peace of mind.
@@ -502,7 +609,9 @@ export default function AboutUsPage() {
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                <Users className="w-12 h-12 text-emerald-200 mb-6" />
+                <svg className="w-12 h-12 text-emerald-200 mb-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.01 2.01 0 0 0 18 6.52l-2.25 4.45H13v6h3v-4.52l2.5-1.25V22h3z"/>
+                </svg>
                 <h3 className="text-2xl font-bold text-white mb-4">Personalized Service</h3>
                 <p className="text-emerald-100">
                   Every traveler is unique. We customize tours to match your interests, pace, and travel style perfectly.
@@ -527,19 +636,23 @@ export default function AboutUsPage() {
                 className="group bg-emerald-600 text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-emerald-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105 inline-flex items-center gap-2"
               >
                 Explore Tours
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
               </a>
               <a
                 href="/contact"
                 className="bg-white border-2 border-emerald-600 text-emerald-600 px-10 py-5 rounded-full font-bold text-lg hover:bg-emerald-50 transition-all shadow-lg inline-flex items-center gap-2"
               >
                 Get In Touch
-                <ChevronRight className="w-6 h-6" />
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
               </a>
             </div>
           </div>
         </section>
       </div>
     </>
-  )
+  );
 }

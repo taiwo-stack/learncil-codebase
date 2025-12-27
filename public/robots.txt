@@ -10,6 +10,18 @@ Host: https://learncil.com
 # Crawl delay (optional)
 Crawl-delay: 1
 
+# Allow crawling of main pages
+Allow: /
+Allow: /about
+Allow: /contact
+Allow: /tours
+Allow: /blog
+Allow: /courses
+Allow: /booking
+Allow: /services
+Allow: /testimonials
+Allow: /founders
+
 # Disallow crawling of admin and student/instructor dashboards
 Disallow: /admin/
 Disallow: /student/
@@ -22,3 +34,8 @@ Disallow: /api/
 # Disallow crawling of internal pages
 Disallow: /_next/
 Disallow: /_not-found
+
+# Allow crawling of public assets
+Allow: /public/
+Allow: /images/
+Allow: /assets/

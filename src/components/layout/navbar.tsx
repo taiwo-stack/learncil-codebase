@@ -8,10 +8,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 interface NavbarProps {
-  onLoginClick: () => void;
+  onLoginClick?: () => void;
 }
 
-export default function Navbar({ onLoginClick }: NavbarProps) {
+export default function Navbar({ onLoginClick = () => {} }: NavbarProps) {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);

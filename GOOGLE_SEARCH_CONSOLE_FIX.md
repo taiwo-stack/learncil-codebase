@@ -3,7 +3,7 @@
 ## Problem
 Google Search Console couldn't fetch your sitemap at `https://learncil.com/sitemap.xml`
 
-## Solution Implemented
+## Solution Implementedd
 I've created a static XML sitemap at `public/sitemap.xml` that Google can easily access.
 
 ## Why This Fixes the Issue
