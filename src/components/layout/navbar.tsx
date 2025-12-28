@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Search, ShoppingCart, Heart, ChevronDown, Phone, Mail, Clock, 
-  Menu, X, User, Facebook, Twitter, Linkedin, Youtube, LogOut 
+  Menu, X, User, Facebook, Twitter, Linkedin, Youtube, LogOut, 
+  Instagram
 } from 'lucide-react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
@@ -80,19 +81,19 @@ export default function Navbar() {
                 <Mail size={14} />
                 <span>info@learncil.com</span>
               </div>
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <Clock size={14} />
                 <span>Mon - Sat: 8:00 - 15:00</span>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex items-center gap-x-4">
               <span>Follow Us:</span>
               <div className="flex gap-x-3">
-                <a href="#"><Facebook size={16} /></a>
-                <a href="#"><Twitter size={16} /></a>
-                <a href="#"><Linkedin size={16} /></a>
-                <a href="#"><Youtube size={16} /></a>
+                <a href="https://www.facebook.com/share/178xxmY14n/?mibextid=wwXIfr"><Facebook size={16} /></a>
+                <a href="https://www.instagram.com/learncilacademy"><Instagram size={16} /></a>
+                <a href="https://www.linkedin.com/company/learncil-academy/"><Linkedin size={16} /></a>
+                {/* <a href="#"><Youtube size={16} /></a> */}
               </div>
             </div>
           </div>
@@ -136,14 +137,14 @@ export default function Navbar() {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-x-4 ml-auto">
-            <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-64">
+            {/* <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-64">
               <input
                 type="text"
                 placeholder="Search For Course...."
                 className="bg-transparent outline-none text-sm w-full"
               />
               <Search size={18} className="text-gray-400" />
-            </div>
+            </div> */}
 
             {/* Login / Logout */}
             {user ? (

@@ -4,28 +4,51 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import { 
-  Mail, Phone, MapPin, Send, Facebook, Twitter, 
-  Instagram, ArrowUp, CheckCircle2
+  Mail, Phone, MapPin, Send, Facebook, Instagram, 
+  ArrowUp, CheckCircle2, X
 } from 'lucide-react'
 
 export function Footer() {
   const [email, setEmail] = useState('')
   const [agreed, setAgreed] = useState(false)
-  const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'loading' | 'success'>('idle')
+  const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [showPolicy, setShowPolicy] = useState(false)
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!agreed) return
-    
+  const handleSubscribe = async () => {
+    if (!email || !agreed) return
+
     setSubscribeStatus('loading')
-    
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      // Send to Google Sheets via Google Apps Script Web App
+      const response = await fetch('https://script.google.com/macros/s/AKfycbzXy_fywzD23e5mDkdiMBgBkJADkveDdnG9NRC92DtZYl1CgHNIR92XbgdliBPFJjgl/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          timestamp: new Date().toISOString(),
+          agreedToPolicy: agreed,
+        }),
+      })
+
       setSubscribeStatus('success')
-            setEmail('')
+      setEmail('')
       setAgreed(false)
-      setTimeout(() => setSubscribeStatus('idle'), 3000)
-    }, 1500)
+      
+      setTimeout(() => {
+        setSubscribeStatus('idle')
+      }, 3000)
+    } catch (error) {
+      console.error('Subscription error:', error)
+      setSubscribeStatus('error')
+      
+      setTimeout(() => {
+        setSubscribeStatus('idle')
+      }, 3000)
+    }
   }
 
   const scrollToTop = () => {
@@ -56,18 +79,18 @@ export function Footer() {
           {/* Company Info */}
           <div>
             <Link
-  href="/"
-  className="inline-flex items-center justify-center bg-white rounded-2xl px-3 py-2 shadow-sm"
->
-  <Image
-    src="/logolearcil.png"
-    alt="Learncil Logo"
-    width={80}
-    height={40}
-    className="h-10 sm:h-12 w-auto object-contain"
-    priority
-  />
-</Link>
+              href="/"
+              className="inline-flex items-center justify-center bg-white rounded-2xl px-3 py-2 shadow-sm"
+            >
+              <Image
+                src="/logolearcil.png"
+                alt="Learncil Logo"
+                width={80}
+                height={40}
+                className="h-10 sm:h-12 w-auto object-contain"
+                priority
+              />
+            </Link>
 
             <p className="text-blue-200 mt-4 text-sm mb-6 leading-relaxed">
               Empowering learners worldwide with quality education and innovative learning solutions.
@@ -83,13 +106,13 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Phone className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                <a href="tel:+234 7067900116" className="hover:text-blue-300 transition-colors">
+                <a href="tel:+2347067900161" className="hover:text-blue-300 transition-colors">
                   +234 706 790 0161
                 </a>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                <span> Zone 1, 1 Dakar St, Wuse 904101, Abuja, Nigeria</span>
+                <span>Zone 1, 1 Dakar St, Wuse 904101, Abuja, Nigeria</span>
               </div>
             </div>
           </div>
@@ -171,14 +194,26 @@ export function Footer() {
                   className="mt-1 w-4 h-4 rounded border-blue-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 bg-blue-900/50"
                 />
                 <span className="text-blue-200 text-xs leading-tight">
-                  I agree to all your terms and policies
+                  I agree to the{' '}
+                  <button
+                    onClick={() => setShowPolicy(true)}
+                    className="text-blue-400 hover:text-blue-300 underline"
+                  >
+                    Privacy Policy
+                  </button>
                 </span>
               </label>
 
               {subscribeStatus === 'success' && (
-                <div className="text-blue-300 text-xs flex items-center gap-1">
+                <div className="text-green-400 text-xs flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
                   Successfully subscribed!
+                </div>
+              )}
+              
+              {subscribeStatus === 'error' && (
+                <div className="text-red-400 text-xs">
+                  Subscription failed. Please try again.
                 </div>
               )}
             </div>
@@ -193,14 +228,6 @@ export function Footer() {
               >
                 <Facebook className="w-5 h-5" />
               </a>
-              {/* <a
-                href="https://twitter.com/learncil"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-200 hover:text-white transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a> */}
               <a
                 href="https://www.instagram.com/learncilacademy"
                 target="_blank"
@@ -210,7 +237,7 @@ export function Footer() {
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href=" https://www.linkedin.com/company/learncil-academy/"
+                href="https://www.linkedin.com/company/learncil-academy/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"
@@ -224,6 +251,131 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Privacy Policy Modal */}
+      {showPolicy && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white">Privacy Policy</h3>
+              <button
+                onClick={() => setShowPolicy(false)}
+                className="text-white hover:text-gray-200 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 py-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+              <div className="space-y-4 text-gray-700">
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-900 mb-2">
+                    Newsletter Subscription Privacy Policy
+                  </h4>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Last updated: {new Date().toLocaleDateString()}
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">1. Information We Collect</h5>
+                  <p className="text-sm leading-relaxed">
+                    When you subscribe to our newsletter, we collect your email address. This is the only personal information we collect through the newsletter subscription form.
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">2. How We Use Your Information</h5>
+                  <p className="text-sm leading-relaxed mb-2">
+                    We use your email address to:
+                  </p>
+                  <ul className="text-sm space-y-1 ml-4 list-disc">
+                    <li>Send you our newsletter with educational updates, tips, and resources</li>
+                    <li>Inform you about new courses, features, and services at LearnCil Academy</li>
+                    <li>Share promotional offers and special announcements</li>
+                    <li>Communicate important updates about our platform</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">3. Data Storage and Security</h5>
+                  <p className="text-sm leading-relaxed">
+                    Your email address is securely stored in our database. We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">4. Sharing Your Information</h5>
+                  <p className="text-sm leading-relaxed">
+                    We do not sell, trade, or rent your email address to third parties. We may share your information only with trusted service providers who assist us in operating our website and conducting our business, provided they agree to keep your information confidential.
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">5. Your Rights</h5>
+                  <p className="text-sm leading-relaxed mb-2">You have the right to:</p>
+                  <ul className="text-sm space-y-1 ml-4 list-disc">
+                    <li>Unsubscribe from our newsletter at any time by clicking the unsubscribe link in any email</li>
+                    <li>Request access to the personal information we hold about you</li>
+                    <li>Request correction or deletion of your personal information</li>
+                    <li>Object to the processing of your personal information</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">6. Email Frequency</h5>
+                  <p className="text-sm leading-relaxed">
+                    We typically send newsletters on a weekly or bi-weekly basis. You can adjust your email preferences or unsubscribe at any time.
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">7. Children's Privacy</h5>
+                  <p className="text-sm leading-relaxed">
+                    Our newsletter is intended for parents and guardians. We do not knowingly collect email addresses from children under 13 years of age.
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">8. Changes to This Policy</h5>
+                  <p className="text-sm leading-relaxed">
+                    We may update this privacy policy from time to time. We will notify subscribers of any material changes by email or through a notice on our website.
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-gray-900 mb-2">9. Contact Us</h5>
+                  <p className="text-sm leading-relaxed">
+                    If you have any questions about this privacy policy or wish to exercise your rights, please contact us at:
+                  </p>
+                  <p className="text-sm mt-2">
+                    <strong>Email:</strong> info@learncil.com<br />
+                    <strong>Website:</strong> learncil.com
+                  </p>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
+                  <p className="text-sm text-blue-900">
+                    <strong>By subscribing to our newsletter, you acknowledge that you have read and understood this Privacy Policy and consent to the collection and use of your email address as described.</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+              <button
+                onClick={() => setShowPolicy(false)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+              >
+                I Understand
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Bottom Bar */}
       <div className="bg-[#1e40af] py-6 relative">
         <div className="container mx-auto px-4">
@@ -235,7 +387,7 @@ export function Footer() {
             {/* Bottom Social Links */}
             <div className="flex items-center gap-4">
               <a
-                href="https://facebook.com/learncil"
+                href="https://www.facebook.com/share/178xxmY14n/?mibextid=wwXIfr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"
@@ -243,15 +395,7 @@ export function Footer() {
                 <Facebook className="w-5 h-5" />
               </a>
               <a
-                href="https://twitter.com/learncil"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-200 hover:text-white transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="https://instagram.com/learncil"
+                href="https://www.instagram.com/learncilacademy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"
@@ -259,7 +403,7 @@ export function Footer() {
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com/company/learncil"
+                href="https://www.linkedin.com/company/learncil-academy/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-200 hover:text-white transition-colors"

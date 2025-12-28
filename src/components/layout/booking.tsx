@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { BookOpen, CheckCircle2, Video, Mic, MoreHorizontal } from 'lucide-react';
 import { ArrowRight, Calendar, Clock, MessageSquare, User, Building, Star, Phone, Mail } from "lucide-react";
 import Image from "next/image";
 import { db } from "./firebase";
@@ -103,6 +104,7 @@ export default function BookingSection() {
     setMessage("");
 
     try {
+      // 1. Save to Firebase
       await addDoc(collection(db, "appointments"), {
         ...formData,
         createdAt: serverTimestamp(),
@@ -110,6 +112,26 @@ export default function BookingSection() {
         assignedInstructor: null,
         appointmentDateTime: new Date(`${formData.appointmentDate}T${formData.appointmentTime}`),
       });
+
+      // 2. Send to Google Sheets
+      try {
+        await fetch('https://script.google.com/macros/s/AKfycbzhIfaAzKGkHPYx1u0NMh0hp8Yv5HaXcfQwPh-TXsHQE3ySWMM_Wi1Bsa2KaZG4Gxb5Ig/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...formData,
+            timestamp: new Date().toISOString(),
+            appointmentDateTime: `${formData.appointmentDate} ${formData.appointmentTime}`,
+            status: "open"
+          }),
+        });
+      } catch (sheetsError) {
+        console.error('Google Sheets error (non-blocking):', sheetsError);
+        // Continue even if Google Sheets fails - data is already in Firebase
+      }
 
       setMessage("Appointment booked successfully! We will get back to you shortly via your preferred contact method.");
 
@@ -212,19 +234,22 @@ export default function BookingSection() {
                 Start Enrollment With Our Instructors
               </h2>
               <p className="text-gray-300 text-base leading-relaxed">
-                Take the first step toward personalized, future-ready learning. Meet with a LearnCil instructor to review your child’s needs, choose the right program, and complete enrollment with ease.
+                Take the first step toward personalized, future-ready learning. Meet with a LearnCil instructor to review your child's needs, choose the right program, and complete enrollment with ease.
               </p>
             </div>
 
             <div className="relative w-full h-80 lg:h-96 rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/call-to-action.png"
+                src="/call-to-actionx.png"
                 alt="Professional consultation"
                 fill
                 className="object-cover"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              
+              
+              
             </div>
           </div>
 
