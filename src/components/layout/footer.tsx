@@ -112,7 +112,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                <span>Zone 1, 1 Dakar St, Wuse 904101, Abuja, Nigeria</span>
+                <span>Block 1, Dakar Street, Wuse Zone 1, Abuja, Nigeria</span>
               </div>
             </div>
           </div>
