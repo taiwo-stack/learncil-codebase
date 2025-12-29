@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { 
   Search, ShoppingCart, Heart, ChevronDown, Phone, Mail, Clock, 
   Menu, X, User, Facebook, Twitter, Linkedin, Youtube, LogOut, 
-  Instagram
+  Instagram, BookOpen
 } from 'lucide-react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
@@ -34,14 +34,20 @@ export default function Navbar() {
     }
   };
 
-  const handleLoginClick = () => {
-    // Example: redirect to login page
-    router.push('/login');
+  // const handleLoginClick = () => {
+  //   // Example: redirect to login page
+  //   router.push('/login');
+  // };
+
+  const handleEnrollClick = () => {
+    scrollToSection('booking');
   };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) element.scrollIntoView({ behavior: 'smooth' });
+    // Close mobile menu after navigation
+    setMobileMenuOpen(false);
   };
 
   const navItems = [
@@ -50,11 +56,11 @@ export default function Navbar() {
     { label: 'ABOUT US', hasDropdown: false, sectionId: 'about' },
     { label: 'COURSES', hasDropdown: false, sectionId: 'courses' },
     { label: 'TESTIMONIALS', hasDropdown: false, sectionId: 'testimonials' },
-    { label: 'BLOG', hasDropdown: false, sectionId: 'blog' },
+    // { label: 'BLOG', hasDropdown: false, sectionId: 'blog' },
   ];
 
   return (
-    <header className="w-full bg-white shadow-sm">
+    <header className="w-full bg-white shadow-sm relative z-50">
       {/* Top Bar */}
       <div className="bg-[#1C3C68] text-white py-2 px-4">
         <div className="max-w-7xl mx-auto">
@@ -65,8 +71,8 @@ export default function Navbar() {
               <span className="text-xs">+234 706 790 0161</span>
             </div>
             <div className="flex items-center gap-x-3">
-              <a href="#"><Facebook size={14} /></a>
-              <a href="#"><Twitter size={14} /></a>
+              <a href="https://www.facebook.com/share/178xxmY14n/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"><Facebook size={14} /></a>
+              <a href="https://www.instagram.com/learncilacademy" target="_blank" rel="noopener noreferrer"><Instagram size={14} /></a>
             </div>
           </div>
 
@@ -81,19 +87,14 @@ export default function Navbar() {
                 <Mail size={14} />
                 <span>info@learncil.com</span>
               </div>
-              {/* <div className="flex items-center gap-2">
-                <Clock size={14} />
-                <span>Mon - Sat: 8:00 - 15:00</span>
-              </div> */}
             </div>
 
             <div className="flex items-center gap-x-4">
               <span>Follow Us:</span>
               <div className="flex gap-x-3">
-                <a href="https://www.facebook.com/share/178xxmY14n/?mibextid=wwXIfr"><Facebook size={16} /></a>
-                <a href="https://www.instagram.com/learncilacademy"><Instagram size={16} /></a>
-                <a href="https://www.linkedin.com/company/learncil-academy/"><Linkedin size={16} /></a>
-                {/* <a href="#"><Youtube size={16} /></a> */}
+                <a href="https://www.facebook.com/share/178xxmY14n/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"><Facebook size={16} /></a>
+                <a href="https://www.instagram.com/learncilacademy" target="_blank" rel="noopener noreferrer"><Instagram size={16} /></a>
+                <a href="https://www.linkedin.com/company/learncil-academy/" target="_blank" rel="noopener noreferrer"><Linkedin size={16} /></a>
               </div>
             </div>
           </div>
@@ -101,7 +102,7 @@ export default function Navbar() {
       </div>
 
       {/* Main Header */}
-      <div className="relative z-10">
+      <div className="relative z-50">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4">
@@ -137,23 +138,17 @@ export default function Navbar() {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-x-4 ml-auto">
-            {/* <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-64">
-              <input
-                type="text"
-                placeholder="Search For Course...."
-                className="bg-transparent outline-none text-sm w-full"
-              />
-              <Search size={18} className="text-gray-400" />
-            </div> */}
-
             {/* Login / Logout */}
             {user ? (
               <button onClick={handleLogout} className="hidden lg:inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition font-medium text-sm">
                 <LogOut size={16} /> Logout
               </button>
             ) : (
-              <button onClick={handleLoginClick} className="hidden lg:inline-flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
-                <User size={16} /> Login
+              // <button onClick={handleLoginClick} className="hidden lg:inline-flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+              //   <User size={16} /> Login
+              // </button>
+              <button onClick={handleEnrollClick} className="hidden lg:inline-flex items-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+                <BookOpen size={16} /> Enroll
               </button>
             )}
 
@@ -168,11 +163,11 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`lg:hidden fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-          <div className={`fixed inset-y-0 right-0 max-w-[300px] w-full bg-white shadow-lg transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`lg:hidden fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 z-50 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className={`fixed inset-y-0 right-0 max-w-[300px] w-full bg-white shadow-lg transform transition-transform duration-300 z-50 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="flex flex-col h-full">
               {/* Mobile Search */}
-              <div className="p-4 border-b">
+              {/* <div className="p-4 border-b">
                 <div className="flex items-center bg-gray-100 rounded-full px-4 py-2">
                   <input
                     type="text"
@@ -181,7 +176,7 @@ export default function Navbar() {
                   />
                   <Search size={18} className="text-gray-400" />
                 </div>
-              </div>
+              </div> */}
 
               {/* Navigation Items */}
               <nav className="flex-1 overflow-y-auto">
@@ -201,30 +196,23 @@ export default function Navbar() {
 
               {/* Mobile Bottom Actions */}
               <div className="border-t p-4 space-y-4">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <Heart size={20} className="text-[#1C3C68]" />
-                    <span>Wishlist (3)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ShoppingCart size={20} className="text-[#1C3C68]" />
-                    <span>Cart (5)</span>
-                  </div>
-                </div>
                 {user ? (
                   <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition font-medium text-sm">
                     <LogOut size={16} /> Logout
                   </button>
                 ) : (
-                  <button onClick={handleLoginClick} className="w-full flex items-center justify-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
-                    <User size={16} /> Login / Register
+                  // <button onClick={handleLoginClick} className="w-full flex items-center justify-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+                  //   <User size={16} /> Login / Register
+                  // </button>
+                  <button onClick={handleEnrollClick} className="w-full flex items-center justify-center gap-2 bg-[#4A90E2] text-white px-4 py-2 rounded-md hover:bg-[#3272b4] transition font-medium text-sm">
+                    <BookOpen size={16} /> Enroll
                   </button>
                 )}
               </div>
 
               {/* Close Button */}
               <button 
-                className="absolute top-4 right-4"
+                className="absolute top-4 right-4 z-10"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <X size={24} />

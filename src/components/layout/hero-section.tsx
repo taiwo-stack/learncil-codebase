@@ -190,7 +190,7 @@ export default function HeroSection() {
       </div>
 
       {/* Main Content Container */}
-  <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-10 pb-8 md:pb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 md:pt-10 pb-8 md:pb-16">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center lg:min-h-[calc(100vh-120px)]">
           {/* Left Content */}
           <div className="space-y-6 md:space-y-8 animate-fade-in-up order-1 lg:order-1 text-center md:text-left mx-auto lg:mx-0 max-w-2xl px-4 sm:px-0">

@@ -9,16 +9,16 @@ export default function FoundersSection() {
       name: "Taiwo Adedotun",
       role: "Co-Founder & Technology Architect",
       image: "/taiwoadedotun.jpg",
-      bio: "Taiwo Adedotun, Co-Founder of LearnCil Academy, is a Software Engineer, Cybersecurity Analyst, and Electrical and Electronic Engineer with a strong track record of building intelligent, secure, and scalable technology solutions for modern startups. His multidisciplinary background places him at the intersection of software innovation, security architecture, and systems engineering—a rare blend that powers the technological backbone of LearnCil.",
+      bio: "Taiwo Adedotun, Co-Founder of LearnCil Academy, is an AI Engineer, Cybersecurity Analyst, and Electrical and Electronic Engineer with a strong passion for building intelligent, secure, and scalable technology solutions. His multidisciplinary background places him at the intersection of software innovation, security architecture, and systems engineering, a rare blend that powers the technological backbone of LearnCil.",
       expertise: [
         "Full-Stack Software Engineering",
-        "Cybersecurity & Security Architecture",
+        "Cybersecurity, Security Architecture",
         "Cloud Technologies & Platform Optimization",
-        "Systems Engineering & Automation"
+        "AI Engineering & Automation"
       ],
       achievements: [
         "Developed robust digital systems for multiple industries",
-        "Built scalable solutions for fast-growing startups",
+        "Built scalable solutions for companies",
         "Integrated advanced technology into personalized learning",
         "Ensured platform stability and innovation-driven operations"
       ],
