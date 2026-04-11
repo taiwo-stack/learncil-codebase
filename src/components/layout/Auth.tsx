@@ -1,17 +1,13 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, db } from './firebase';
+import { supabase } from '@/lib/supabase';
 
 interface AuthProps {
-  onClose: () => void;
+  onClose?: () => void;
+  showCloseButton?: boolean;
 }
 
-export default function Auth({ onClose }: AuthProps) {
+export default function Auth({ onClose, showCloseButton = true }: AuthProps) {
   const router = useRouter();
 
   // Form fields
@@ -24,30 +20,17 @@ export default function Auth({ onClose }: AuthProps) {
   const [forgotPassword, setForgotPassword] = useState(false);
 
   const validateEmailDomain = (email: string) => {
-    // Check for domain-based emails (e.g., name.student@learncil.com)
-    const validDomains = ['.student@learncil.com', '.admin@learncil.com', '.instructor@learncil.com'];
-    if (validDomains.some(domain => email.endsWith(domain))) return true;
-
-    // Check for specific admin emails (backwards compatibility)
-    const adminEmails = ['admin@learncil.com', 'info@learncil.com'];
-    if (adminEmails.includes(email)) return true;
-
-    return false;
+    // Only the authorized administrator account is permitted to authenticate.
+    return email === 'learncildev@gmail.com';
   };
 
   const getUserRole = (email: string) => {
-    if (email.endsWith('.student@learncil.com')) return 'student';
-    if (email.endsWith('.admin@learncil.com')) return 'admin';
-    if (email.endsWith('.instructor@learncil.com')) return 'instructor';
-    if (['admin@learncil.com', 'info@learncil.com'].includes(email)) return 'admin';
+    if (email === 'learncildev@gmail.com') return 'admin';
     return null;
   };
 
-  const getDashboardRoute = (email: string, uid: string) => {
-    const role = getUserRole(email);
-    if (role === 'student') return `/student/dashboard/${uid}`;
-    if (role === 'admin') return `/admin/dashboard/${uid}`;
-    if (role === 'instructor') return `/instructor/dashboard/${uid}`;
+  const getDashboardRoute = (email: string, id: string) => {
+    if (email === 'learncildev@gmail.com') return `/admin/dashboard/${id}`;
     return null;
   };
 
@@ -57,24 +40,15 @@ export default function Auth({ onClose }: AuthProps) {
     setMessage('');
     setError('');
 
-    if (!auth) {
-      setError('Authentication service is not available. Please try again later.');
-      setLoading(false);
-      return;
-    }
-
     if (forgotPassword) {
       try {
-        await sendPasswordResetEmail(auth, email);
+        const { error } = await supabase.auth.resetPasswordForEmail(email);
+        if (error) throw error;
         setMessage('Password reset email sent! Please check your inbox.');
         setForgotPassword(false);
-      } catch (error: any) {
-        console.error('Password reset error:', error);
-        if (error.code === 'auth/user-not-found') {
-          setError('No user found with this email address.');
-        } else {
-          setError('Failed to send password reset email. Please try again.');
-        }
+      } catch (err: any) {
+        console.error('Password reset error:', err);
+        setError(err.message || 'Failed to send password reset email.');
       }
     } else {
       // Validate email domain before signin
@@ -84,29 +58,29 @@ export default function Auth({ onClose }: AuthProps) {
         return;
       }
 
-      if (!db) {
-        setError('Database service is not available. Please try again later.');
-        setLoading(false);
-        return;
-      }
-
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-        // Refresh the user's token to get updated custom claims
-        await user.getIdToken(true);
+        if (signInError) throw signInError;
 
-        // Check if user profile exists in Firestore
-        if (!db) {
-          setError('Database service is not available. Please try again later.');
-          setLoading(false);
-          return;
+        const user = data.user;
+        if (!user) throw new Error('No user data returned.');
+
+        // Check if user profile exists in Supabase database
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError && profileError.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+          throw profileError;
         }
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
 
-        if (!userDoc.exists()) {
+        if (!profile) {
           // Create user profile for first-time login
           const userRole = getUserRole(email);
           if (!userRole) {
@@ -115,52 +89,43 @@ export default function Auth({ onClose }: AuthProps) {
             return;
           }
 
-          const userProfile = {
-            uid: user.uid,
-            email: user.email,
-            role: userRole,
-            createdAt: new Date(),
-            lastLogin: new Date(),
-          };
+          const { error: insertError } = await supabase.from('profiles').insert([
+            {
+              id: user.id,
+              email: user.email,
+              role: userRole,
+              created_at: new Date().toISOString(),
+              last_login: new Date().toISOString(),
+            },
+          ]);
 
-          await setDoc(userDocRef, userProfile);
+          if (insertError) throw insertError;
           setMessage('Profile created successfully! Redirecting to your dashboard...');
         } else {
           // Update last login
-          const userData = userDoc.data();
-          await setDoc(userDocRef, {
-            ...userData,
-            lastLogin: new Date(),
-          });
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ last_login: new Date().toISOString() })
+            .eq('id', user.id);
+
+          if (updateError) throw updateError;
           setMessage('Logged in successfully! Redirecting...');
         }
 
         // Get dashboard route with user ID
-        const dashboardRoute = getDashboardRoute(email, user.uid);
+        const dashboardRoute = getDashboardRoute(email, user.id);
         if (dashboardRoute) {
-          // Keep loading overlay visible during redirect
           setTimeout(() => {
             router.push(dashboardRoute);
-            onClose();
-          }, 1500); // Brief delay to show redirect message
+            if (onClose) onClose();
+          }, 1500);
         } else {
           setError('Unable to determine your dashboard. Please contact support.');
           setLoading(false);
         }
-      } catch (error: any) {
-        console.error('Signin error:', error);
-        // Provide more user-friendly error messages
-        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-          setError('Invalid email or password.');
-        } else if (error.code === 'auth/invalid-email') {
-          setError('Please enter a valid email address.');
-        } else if (error.code === 'auth/user-disabled') {
-          setError('This account has been disabled. Please contact support.');
-        } else if (error.code === 'auth/too-many-requests') {
-          setError('Too many failed login attempts. Please try again later.');
-        } else {
-          setError(`An error occurred: ${error.message}`);
-        }
+      } catch (err: any) {
+        console.error('Signin error:', err);
+        setError(err.message || 'An error occurred during sign in.');
       }
     }
     setLoading(false);
@@ -193,7 +158,9 @@ export default function Auth({ onClose }: AuthProps) {
       )}
 
       <div className={`bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative transform transition-all duration-300 ease-in-out ${loading ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
-        <button onClick={onClose} className="absolute top-2 right-4 text-2xl font-bold">&times;</button>
+        {showCloseButton && onClose && (
+          <button onClick={onClose} className="absolute top-2 right-4 text-2xl font-bold">&times;</button>
+        )}
         <h2 className="text-2xl font-bold mb-6 text-center">{getTitle()}</h2>
 
         <form onSubmit={handleAuthAction}>

@@ -26,7 +26,7 @@ export interface User {
   email: string
   fullName: string
   phone?: string
-  role: 'customer' | 'admin' | 'ambassador'
+  role: 'student' | 'instructor' | 'admin' | 'guest'
   createdAt: string
   updatedAt: string
 }
@@ -137,19 +137,29 @@ export interface PaymentIntent {
 
 export interface Course {
   id: string;
+  type: 'curriculum' | 'tech';
   title: string;
-  description: string;
-  category: string;
-  price: number;
   duration: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
+  image_url: string;
+  level: string;
   status: 'draft' | 'published' | 'archived';
-  outcome: string;
-  enrolledStudents: number;
-  rating: number;
-  imageUrl?: string;
-  createdAt: any;
-  updatedAt: any;
+  curriculum_data: {
+    keyStage?: string;
+    yearGroups?: string[];
+    subject?: string;
+    examBoard?: string;
+    pdf_url?: string;
+  };
+  tech_data: {
+    gradeLevel?: string;
+    category?: string;
+    tools?: string[];
+    projects?: number;
+    ageRange?: string;
+    pdf_url?: string;
+  };
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CourseAssignment {
@@ -157,6 +167,6 @@ export interface CourseAssignment {
   courseId: string;
   studentId: string;
   instructorId: string;
-  assignedAt: any;
+  assignedAt: string;
   status: 'active' | 'completed' | 'dropped';
 }

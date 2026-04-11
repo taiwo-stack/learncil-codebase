@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useEffect } from 'react';
@@ -12,16 +10,47 @@ import Calltoaction from '@/components/courses/calltoaction';
 import FoundersSection from '@/components/layout/founders-section';
 import SpecialCourses from '@/components/courses/special-courses';
 import BookingSection from '@/components/layout/booking';
-import AboutExperienceSection from '@/components/layout/about-experience';
 import StudentTestimonial from '@/components/layout/studenttestimonial';
-
-
-
-
-
+import { supabase } from '@/lib/supabase';
 
 export default function HomePage() {
   const router = useRouter();
+
+  useEffect(() => {
+    const checkUserAndRedirect = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user) {
+        const user = session.user;
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        if (error) {
+          console.error('Error fetching user role:', error);
+          return;
+        }
+
+        if (profile) {
+          if (profile.role === 'admin') {
+            router.replace(`/admin/dashboard/${user.id}`);
+          }
+        }
+      }
+    };
+
+    checkUserAndRedirect();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        checkUserAndRedirect();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [router]);
 
   return (
     <>
@@ -65,9 +94,6 @@ export default function HomePage() {
         <div id="services">
           <ServicesSection />
         </div>
-        <div id="about">
-          <AboutExperienceSection />
-        </div>
         <div id="courses">
           <FeaturedCourses />
         </div>
@@ -76,64 +102,10 @@ export default function HomePage() {
         <div id="booking">
           <BookingSection />
         </div>
-        <FoundersSection />
         <div id="testimonials">
           <StudentTestimonial />
         </div>
       </div>
     </>
   );
-
-  useEffect(() => {
-    // Dynamically import and initialize Firebase
-    const initAuth = async () => {
-      try {
-        const { onAuthStateChanged } = await import('firebase/auth');
-        const { doc, getDoc } = await import('firebase/firestore');
-        const { auth, db } = await import('@/components/layout/firebase');
-
-        // Only proceed if auth and db are available
-        if (!auth || !db) {
-          console.warn('Firebase is not initialized');
-          return;
-        }
-
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-          if (user) {
-            // User is logged in, redirect to their dashboard
-            try {
-              if (!db) {
-                console.warn('Database not available for user redirect');
-                return;
-              }
-              const userDocRef = doc(db, 'users', user.uid);
-              const userDoc = await getDoc(userDocRef);
-
-              if (userDoc.exists()) {
-                const userData = userDoc.data();
-                const role = userData.role;
-
-                if (role === 'student') {
-                  router.replace(`/student/dashboard/${user.uid}`);
-                } else if (role === 'admin') {
-                  router.replace(`/admin/dashboard/${user.uid}`);
-                } else if (role === 'instructor') {
-                  router.replace(`/instructor/dashboard/${user.uid}`);
-                }
-              }
-            } catch (error) {
-              console.error('Error fetching user role:', error);
-            }
-          }
-          // If not logged in, stay on homepage
-        });
-
-        return () => unsubscribe();
-      } catch (error) {
-        console.error('Error initializing auth:', error);
-      }
-    };
-
-    initAuth();
-  }, [router]);
 }

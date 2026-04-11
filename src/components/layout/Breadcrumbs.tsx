@@ -21,16 +21,14 @@ const Breadcrumbs = () => {
       currentPath += `/${segment}`;
       
       // Handle special routes
-      if (segment === 'admin' || segment === 'student' || segment === 'instructor') {
+      if (segment === 'student' || segment === 'instructor') {
         crumbs.push({
           label: segment.charAt(0).toUpperCase() + segment.slice(1),
           href: currentPath
         });
       } else if (segment === 'dashboard') {
         const prevSegment = pathSegments[index - 1];
-        if (prevSegment === 'admin') {
-          crumbs.push({ label: 'Admin Dashboard', href: currentPath });
-        } else if (prevSegment === 'student') {
+        if (prevSegment === 'student') {
           crumbs.push({ label: 'Student Dashboard', href: currentPath });
         } else if (prevSegment === 'instructor') {
           crumbs.push({ label: 'Instructor Dashboard', href: currentPath });

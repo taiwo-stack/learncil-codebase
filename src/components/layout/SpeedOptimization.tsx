@@ -13,9 +13,6 @@ export default function SpeedOptimization() {
       document.head.appendChild(link);
     };
 
-    // Preload critical fonts
-    preloadLink('/fonts/Inter.woff2', 'font');
-    
     // Preconnect to external domains
     const preconnect = (href: string) => {
       const link = document.createElement('link');

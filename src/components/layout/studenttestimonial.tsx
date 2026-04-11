@@ -70,7 +70,7 @@ export default function StudentTestimonial({
             Parent Testimonials
           </p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4">
-            What Say’s About Learncil
+            What Say&apos;s About Learncil
           </h2>
         </div>
 
@@ -94,7 +94,7 @@ export default function StudentTestimonial({
             <div className="relative min-h-[320px] md:min-h-[420px] flex flex-col justify-between">
               <div>
                 {/* Quote mark */}
-                <div className="text-blue-500 text-6xl md:text-7xl leading-none mb-4">"</div>
+                <div className="text-blue-500 text-6xl md:text-7xl leading-none mb-4">&quot;</div>
 
                 <blockquote className="text-gray-700 leading-relaxed text-base md:text-lg">
                   {s.quote}

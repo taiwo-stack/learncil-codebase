@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' }
       },
-      async authorize(credentials) {
+      async authorize(_credentials) {
         // Implement your auth logic here
         // This is where you'd validate against your database
         return null
@@ -25,10 +25,10 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/signin',
   },
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token: _token }) {
       return session
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user: _user }) {
       return token
     },
   },

@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import Head from 'next/head';
+import Script from 'next/script';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Navbar from '@/components/layout/navbar';
@@ -72,9 +72,7 @@ export const metadata = {
   category: 'education',
   classification: 'online learning platform',
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    icon: '/learncil.png',
   }
 };
 
@@ -105,34 +103,39 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         
         {/* Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "EducationalOrganization",
-            "name": "Learncil",
-            "url": "https://learncil.com",
-            "logo": "https://learncil.com/learncil.png",
-            "description": "Discover engaging online courses for K-12 students and adults. Expert teachers, interactive learning, and flexible schedules. Start your educational journey today!",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Lagos",
-              "addressCountry": "NG"
-            },
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "+234-812-345-6789",
-              "contactType": "Customer Support",
-              "availableLanguage": ["English"]
-            },
-            "sameAs": [
-              "https://twitter.com/learncil",
-              "https://facebook.com/learncil",
-              "https://instagram.com/learncil"
-            ]
-          })}
-        </script>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "EducationalOrganization",
+              "name": "Learncil",
+              "url": "https://learncil.com",
+              "logo": "https://learncil.com/learncil.png",
+              "description": "Discover engaging online courses for K-12 students and adults. Expert teachers, interactive learning, and flexible schedules. Start your educational journey today!",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Lagos",
+                "addressCountry": "NG"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+234-812-345-6789",
+                "contactType": "Customer Support",
+                "availableLanguage": ["English"]
+              },
+              "sameAs": [
+                "https://twitter.com/learncil",
+                "https://facebook.com/learncil",
+                "https://instagram.com/learncil"
+              ]
+            })
+          }}
+        />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

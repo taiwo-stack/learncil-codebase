@@ -1,108 +1,73 @@
 "use client";
 
-import AuthGuard from '@/components/layout/AuthGuard';
+import { useEffect, useState, use } from 'react';
+import { supabase } from '@/lib/supabase';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/components/layout/firebase';
+import AuthGuard from '@/components/layout/AuthGuard';
 
-interface UserData {
-  email: string;
-  role: string;
-  createdAt: Date;
-  lastLogin: Date;
-}
-
-export default function AdminDashboard() {
-  const params = useParams();
-  const uid = params.uid as string;
-  const [userData, setUserData] = useState<UserData | null>(null);
+export default function AdminDashboardPage({ params }: { params: Promise<{ uid: string }> }) {
+  const { uid } = use(params);
+  const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchProfile = async () => {
       try {
-        const userDocRef = doc(db, 'users', uid);
-        const userDoc = await getDoc(userDocRef);
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', uid)
+          .single();
 
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          setUserData({
-            email: data.email,
-            role: data.role,
-            createdAt: data.createdAt?.toDate() || new Date(),
-            lastLogin: data.lastLogin?.toDate() || new Date(),
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+        if (error) throw error;
+        setProfile(data);
+      } catch (err) {
+        console.error('Error fetching profile:', err);
       } finally {
         setLoading(false);
       }
     };
 
     if (uid) {
-      fetchUserData();
+      fetchProfile();
     }
   }, [uid]);
 
   if (loading) {
     return (
-      <AuthGuard role="admin">
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <p className="text-lg font-semibold">Loading your dashboard...</p>
+      <DashboardLayout uid={uid}>
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
-      </AuthGuard>
+      </DashboardLayout>
     );
   }
 
   return (
-    <AuthGuard role="admin">
-      <DashboardLayout role="admin" uid={uid}>
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="mt-2 text-gray-600">Manage your learning platform effectively.</p>
+    <AuthGuard>
+      <DashboardLayout uid={uid}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Welcome Card */}
+          <div className="md:col-span-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+            <div className="relative z-10">
+              <h2 className="text-3xl font-bold mb-2">
+                Welcome back, Admin! 👋
+              </h2>
+              <p className="text-blue-100 text-lg max-w-xl">
+                Here is your administrative overview. Keep track of all incoming appointments and enrollment requests across the platform.
+              </p>
+            </div>
           </div>
 
-          {userData && (
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h2 className="text-xl font-semibold mb-4">Administrator Profile</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div>
-                  <span className="font-medium text-gray-600">Email:</span>
-                  <p className="text-gray-900">{userData.email}</p>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Member since:</span>
-                  <p className="text-gray-900">{userData.createdAt.toLocaleDateString()}</p>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Last login:</span>
-                  <p className="text-gray-900">{userData.lastLogin.toLocaleDateString()}</p>
-                </div>
-              </div>
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-center items-center text-center">
+            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
+               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
             </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-              <h2 className="text-xl font-semibold mb-4 text-blue-600">User Management</h2>
-              <p className="text-gray-600">Manage students and staff accounts.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-              <h2 className="text-xl font-semibold mb-4 text-green-600">Course Management</h2>
-              <p className="text-gray-600">Create and edit courses.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-              <h2 className="text-xl font-semibold mb-4 text-purple-600">Analytics</h2>
-              <p className="text-gray-600">View analytics and reports.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-              <h2 className="text-xl font-semibold mb-4 text-orange-600">Settings</h2>
-              <p className="text-gray-600">Configure system settings.</p>
-            </div>
+            <h3 className="font-semibold text-gray-900">System Controls</h3>
+            <p className="text-sm text-gray-500 mt-1">Manage global appointments</p>
           </div>
         </div>
       </DashboardLayout>

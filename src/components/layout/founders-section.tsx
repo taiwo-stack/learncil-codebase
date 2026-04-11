@@ -26,23 +26,23 @@ export default function FoundersSection() {
       icons: [Code, Shield, Lightbulb, Target]
     },
     {
-      name: "Alabi Favor John",
-      role: "Co-Founder & Educational Architect",
+      name: "Favour Alabi",
+      role: "Founder",
       image: "/alabifavour.jpg",
-      bio: "Alabi Favor John, Co-Founder of LearnCil Academy, is an educator, curriculum strategist, and learning experience designer dedicated to transforming how students engage with knowledge in the digital age. With a deep passion for student-centered learning and academic excellence, Favor brings a unique perspective that bridges traditional pedagogy with modern educational innovation.",
+      bio: "Favour Alabi, Founder of LearnCil Academy, is a professional Electrical and Electronic Engineer, certified Google Educator, and seasoned school administrator. His engineering background provides a unique advantage in STEM education, combining analytical precision with real-world problem-solving. Favour’s journey from empathetic classroom teacher to Managing Director of CIMA Schools has given him a rare, 360-degree perspective on learning systems. He understands students, teachers, parents, and systems alike. He founded LearnCil Academy to ensure K–12 learners across borders have a learning environment that truly understands their world, pace, and cultural identity.",
       expertise: [
-        "K-12 Curriculum Design & Strategy",
-        "Student-Centered Learning Methodology",
-        "Educational Assessment & Quality Assurance",
-        "Inclusive Education Advocacy"
+        "STEM Education & Analytical Precision",
+        "Curriculum Design & Strategy",
+        "Instructional Leadership",
+        "School-Wide Operations & Student Support"
       ],
       achievements: [
-        "Developed engaging courses aligned with USA and UK standards",
-        "Implemented mastery-based learning approaches",
-        "Trained educators in modern teaching methodologies",
-        "Created personalized learning pathways for diverse students"
+        "Certified Google Educator with an engineering background",
+        "Managing Director of CIMA Schools in Ibadan",
+        "Built personalized learning environments for cross-border students",
+        "Leads a growing community of culturally-aware educators"
       ],
-      quote: "Education is not just about passing exams—it's about empowering young minds to think, create, and thrive.",
+      quote: "To build an educational space where every learner feels understood, supported, and confident no matter where they live or which curriculum they study.",
       icons: [BookOpen, Users, Heart, Award]
     }
   ];

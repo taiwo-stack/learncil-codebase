@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { collection, query, getDocs, where, orderBy } from 'firebase/firestore';
-import { db } from './firebase';
+import { supabase } from '@/lib/supabase';
 import { Calendar, Users, Clock, TrendingUp, CheckCircle, XCircle, AlertCircle, BarChart3 } from 'lucide-react';
 
 interface AnalyticsData {
@@ -31,7 +30,6 @@ export default function AppointmentAnalytics() {
 
   const fetchAnalytics = async () => {
     try {
-      const appointmentsRef = collection(db, 'appointments');
       const now = new Date();
       let startDate: Date;
 
@@ -47,18 +45,18 @@ export default function AppointmentAnalytics() {
           break;
       }
 
-      const q = query(
-        appointmentsRef,
-        where('createdAt', '>=', startDate),
-        orderBy('createdAt', 'desc')
-      );
+      const { data: appointments, error } = await supabase
+        .from('appointments')
+        .select('*')
+        .gte('created_at', startDate.toISOString())
+        .order('created_at', { ascending: false });
 
-      const querySnapshot = await getDocs(q);
-      const appointments: any[] = [];
+      if (error) throw error;
 
-      querySnapshot.forEach((doc) => {
-        appointments.push({ id: doc.id, ...doc.data() });
-      });
+      if (!appointments) {
+        setLoading(false);
+        return;
+      }
 
       // Calculate analytics
       const totalAppointments = appointments.length;
@@ -163,7 +161,7 @@ export default function AppointmentAnalytics() {
   }
 
   if (!analytics) {
-    return <div className="text-center py-12 text-gray-600">Failed to load analytics</div>;
+    return <div className="text-center py-12 text-gray-600">No analytics data available for this range.</div>;
   }
 
   const StatCard = ({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) => (
@@ -240,7 +238,6 @@ export default function AppointmentAnalytics() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Popular Subjects */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
@@ -263,7 +260,6 @@ export default function AppointmentAnalytics() {
           </div>
         </div>
 
-        {/* Contact Methods */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Users className="w-5 h-5" />
@@ -280,7 +276,7 @@ export default function AppointmentAnalytics() {
                     <div
                       className="bg-blue-600 h-2 rounded-full"
                       style={{
-                        width: `${(item.count / analytics.totalAppointments) * 100}%`
+                        width: `${analytics.totalAppointments > 0 ? (item.count / analytics.totalAppointments) * 100 : 0}%`
                       }}
                     ></div>
                   </div>
@@ -292,7 +288,6 @@ export default function AppointmentAnalytics() {
         </div>
       </div>
 
-      {/* Hourly Distribution */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <Clock className="w-5 h-5" />
@@ -308,7 +303,6 @@ export default function AppointmentAnalytics() {
         </div>
       </div>
 
-      {/* Additional Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Average Duration</h3>

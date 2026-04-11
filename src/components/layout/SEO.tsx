@@ -15,7 +15,7 @@ interface SEOProps {
   twitterTitle?: string;
   twitterDescription?: string;
   twitterImage?: string;
-  schema?: any;
+  schema?: Record<string, unknown>;
   robots?: string;
 }
 

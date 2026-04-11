@@ -2,17 +2,34 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { 
   Mail, Phone, MapPin, Send, Facebook, Instagram, 
   ArrowUp, CheckCircle2, X
 } from 'lucide-react'
 
 export function Footer() {
+  const pathname = usePathname()
   const [email, setEmail] = useState('')
   const [agreed, setAgreed] = useState(false)
   const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [showPolicy, setShowPolicy] = useState(false)
+  const [legalSettings, setLegalSettings] = useState<{ privacy_policy_url?: string, terms_of_service_url?: string }>({});
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(json => {
+        if (json.data) setLegalSettings(json.data);
+      })
+      .catch(console.error);
+  }, []);
+
+  // Hide footer on admin pages
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   const handleSubscribe = async () => {
     if (!email || !agreed) return
@@ -59,6 +76,23 @@ export function Footer() {
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const handleNavigation = (id: string) => {
+    if (id === 'about') {
+      import('next/navigation').then(({ useRouter }) => {
+        // Since Footer is a component, we use the router from the hook if available
+        // or just use window.location if we want to be simple, but the component already has usePathname.
+      });
+      // Actually, it's easier to just use Link or router.push
+      window.location.href = '/about';
+    } else {
+      if (pathname === '/') {
+        scrollToSection(id);
+      } else {
+        window.location.href = `/#${id}`;
+      }
     }
   }
 
@@ -124,7 +158,7 @@ export function Footer() {
               {navigationLinks.map((link) => (
                 <li key={link.id}>
                   <button 
-                    onClick={() => scrollToSection(link.id)}
+                    onClick={() => handleNavigation(link.id)}
                     className="text-blue-200 hover:text-white transition-colors text-sm text-left"
                   >
                     {link.label}
@@ -149,12 +183,12 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-blue-200 hover:text-white transition-colors text-sm">
+                <Link href={legalSettings.privacy_policy_url || "/privacy"} target={legalSettings.privacy_policy_url ? "_blank" : "_self"} className="text-blue-200 hover:text-white transition-colors text-sm">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-blue-200 hover:text-white transition-colors text-sm">
+                <Link href={legalSettings.terms_of_service_url || "/terms"} target={legalSettings.terms_of_service_url ? "_blank" : "_self"} className="text-blue-200 hover:text-white transition-colors text-sm">
                   Terms of Service
                 </Link>
               </li>
