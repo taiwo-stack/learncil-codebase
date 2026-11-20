@@ -11,8 +11,28 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        display: ['var(--font-display)', 'Montserrat', 'Inter', 'sans-serif'],
       },
       colors: {
+        // LearnCil brand palette
+        brand: {
+          navy: {
+            DEFAULT: '#1c4d7c',
+            dark: '#12345a',
+            50: '#f1f6fb',
+            100: '#e1ecf6',
+          },
+          sky: {
+            DEFAULT: '#69a6da',
+            light: '#a9cdea',
+            50: '#f2f8fd',
+          },
+          gold: {
+            DEFAULT: '#f7ac19',
+            dark: '#d98f00',
+            50: '#fff8e8',
+          },
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
