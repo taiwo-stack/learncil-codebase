@@ -1,174 +1,204 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Star } from "lucide-react";
+import { ArrowLeft, ArrowRight, Quote, Star } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+import {
+  testimonials as defaultTestimonials,
+  type Testimonial,
+} from "@/data/testimonials";
 
-type Student = {
-  id: string;
-  name: string;
-  role?: string;
-  image: string;
-  quote: string;
-  rating?: number; // 0-5
-};
+function initials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+}
 
-const defaultStudents: Student[] = [
-  {
-    id: "funmito",
-    name: "Funmito Dorcas",
-    role: "Parent",
-    image: "/parent_1.png",
-    quote:
-      "LearnCil took the time to understand my child's strengths and learning gaps through a thorough assessment. They provided a clear learning plan, consistent progress updates, and supportive instructors who made my child more confident and engaged. The structured approach and personalized guidance truly exceeded my expectations.",
-    rating: 5,
-  },
-  {
-    id: "aisha",
-    name: "Aisha Anathony",
-    role: "Parent",
-    image: "/parent_2.jpg",
-    quote:
-      "The LearnCil experience was truly transformational. My child received hands-on support, personalized lessons, and encouragement from instructors who genuinely cared. I noticed improvements not just academically but also in confidence and curiosity.",
-    rating: 5,
-  },
-  {
-    id: "okewumi",
-    name: "Okewumi Taiwo",
-    role: "Parent",
-    image: "/parent_3.png",
-    quote:
-      "LearnCil provides a supportive and structured environment. The lesson plans are clear, the curriculum is engaging, and the regular feedback helps us stay updated on our child's progress. I highly recommend LearnCil to any parent who wants real academic improvement.",
-    rating: 5,
-  },
-];
+function Avatar({ person }: { person: Testimonial }) {
+  return (
+    <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-brand-navy-100 ring-2 ring-white">
+      {person.image ? (
+        <Image
+          src={person.image}
+          alt={person.name}
+          fill
+          sizes="48px"
+          className="object-cover object-top"
+        />
+      ) : (
+        <span className="flex h-full w-full items-center justify-center text-sm font-bold text-brand-navy">
+          {initials(person.name)}
+        </span>
+      )}
+    </div>
+  );
+}
 
+function Stars({ rating }: { rating: number }) {
+  return (
+    <div
+      className="flex items-center gap-0.5"
+      role="img"
+      aria-label={`Rated ${rating} out of 5`}
+    >
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          className={`h-4 w-4 ${
+            i < rating ? "fill-brand-gold text-brand-gold" : "text-slate-300"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function StudentTestimonial({
-  students = defaultStudents,
+  students = defaultTestimonials,
 }: {
-  students?: Student[];
+  students?: Testimonial[];
 }) {
-  const [index, setIndex] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+  const [selected, setSelected] = useState(0);
+  const [snapCount, setSnapCount] = useState(0);
+
+  const sync = useCallback((embla: NonNullable<CarouselApi>) => {
+    setSnapCount(embla.scrollSnapList().length);
+    setSelected(embla.selectedScrollSnap());
+  }, []);
 
   useEffect(() => {
-    // simple auto-advance every 8s
-    const t = setInterval(() => setIndex((i) => (i + 1) % students.length), 8000);
-    return () => clearInterval(t);
-  }, [students.length]);
+    if (!api) return;
+    sync(api);
+    api.on("select", sync);
+    api.on("reInit", sync);
+    return () => {
+      api.off("select", sync);
+      api.off("reInit", sync);
+    };
+  }, [api, sync]);
 
-  const prev = () => setIndex((i) => (i - 1 + students.length) % students.length);
-  const next = () => setIndex((i) => (i + 1) % students.length);
-
-  const s = students[index];
+  const showControls = snapCount > 1;
 
   return (
-    <section className="py-16 sm:py-20 px-4 bg-gradient-to-br from-purple-50 via-pink-50/30 to-rose-50/20">
-      <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-8">
-          <p className="text-sm text-blue-600 font-medium uppercase tracking-wide">
-            Parent Testimonials
-          </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4">
-            What Say&apos;s About Learncil
+    <section className="bg-brand-navy-50 px-4 py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl">
+        {/* Header */}
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <span className="inline-flex items-center rounded-full bg-brand-gold-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-gold-dark">
+            Parent stories
+          </span>
+          <h2 className="mt-5 text-3xl font-bold tracking-tight text-brand-navy-dark md:text-4xl">
+            What parents say about LearnCil
           </h2>
+          <p className="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
+            Real feedback from families who have learned with us.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          {/* Left - big image (centered) */}
-          <div className="order-1 lg:order-1 flex justify-center lg:justify-center">
-            <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-md lg:max-w-none">
-              <div className="relative h-80 lg:h-[420px] bg-gray-100 flex items-center justify-center">
-                <Image
-                  src={s.image}
-                  alt={s.name}
-                  fill
-                  className="object-cover object-top"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Right - quote and meta (fixed min-height to avoid layout shift) */}
-          <div className="order-2 lg:order-2">
-            <div className="relative min-h-[320px] md:min-h-[420px] flex flex-col justify-between">
-              <div>
-                {/* Quote mark */}
-                <div className="text-blue-500 text-6xl md:text-7xl leading-none mb-4">&quot;</div>
-
-                <blockquote className="text-gray-700 leading-relaxed text-base md:text-lg">
-                  {s.quote}
-                </blockquote>
-              </div>
-
-              {/* Divider line */}
-              <div className="w-full h-px bg-gray-200 my-4"></div>
-
-              <div className="flex items-center gap-6">
-                <div className="relative w-24 h-24 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
-                  <Image
-                    src={s.image}
-                    alt={s.name}
-                    fill
-                    sizes="(max-width: 96px) 100vw, 96px"
-                    className="object-cover object-top"
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-lg text-gray-900 truncate">{s.name}</div>
-                  <div className="text-sm text-blue-600 font-medium">{s.role}</div>
-
-                  <div className="flex items-center mt-2 text-sm text-gray-600">
-                    <div className="flex items-center text-amber-400 mr-2">
-                      <Star className="w-4 h-4 text-amber-400" />
-                      <span className="ml-1 font-semibold text-amber-600">{s.rating ?? "—"}</span>
-                    </div>
-                    <div className="text-xs text-gray-500">(based on recent feedback)</div>
+        {/* Cards */}
+        <Carousel
+          setApi={setApi}
+          opts={{ align: "start", loop: false }}
+          aria-label="Parent testimonials"
+        >
+          <CarouselContent className="-ml-6">
+            {students.map((person) => (
+              <CarouselItem
+                key={person.id}
+                className="pl-6 md:basis-1/2 lg:basis-1/3"
+              >
+                <figure className="flex h-full flex-col rounded-3xl bg-white p-8 shadow-sm ring-1 ring-brand-navy/10 transition-shadow duration-300 hover:shadow-lg">
+                  <div className="mb-5 flex items-center justify-between">
+                    <Quote
+                      className="h-9 w-9 fill-brand-gold/20 text-brand-gold"
+                      aria-hidden="true"
+                    />
+                    {person.rating ? <Stars rating={person.rating} /> : null}
                   </div>
-                </div>
 
-                {/* Controls positioned as part of the flex layout */}
-                <div className="flex items-center gap-3 ml-4">
-                  <button
-                    onClick={prev}
-                    aria-label="Previous testimonial"
-                    className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-blue-50 transition-colors"
-                  >
-                    <ArrowLeft className="w-4 h-4 text-blue-600" />
-                  </button>
+                  <blockquote className="flex-1 text-[15px] leading-7 text-slate-700">
+                    {person.quote}
+                  </blockquote>
 
-                  <button
-                    onClick={next}
-                    aria-label="Next testimonial"
-                    className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-blue-50 transition-colors"
-                  >
-                    <ArrowRight className="w-4 h-4 text-blue-600" />
-                  </button>
-                </div>
-              </div>
+                  <figcaption className="mt-8 flex items-center gap-3 border-t border-slate-100 pt-6">
+                    <Avatar person={person} />
+                    <div className="min-w-0">
+                      <div className="truncate font-semibold text-brand-navy-dark">
+                        {person.name}
+                      </div>
+                      {person.role ? (
+                        <div className="text-sm text-slate-500">
+                          {person.role}
+                        </div>
+                      ) : null}
+                    </div>
+                  </figcaption>
+                </figure>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
+        {/* Controls (only shown when there are more cards than fit on screen) */}
+        {showControls && (
+          <div className="mt-8 flex items-center justify-center gap-6">
+            <button
+              type="button"
+              onClick={() => api?.scrollPrev()}
+              aria-label="Previous testimonial"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand-navy shadow-sm ring-1 ring-brand-navy/10 transition hover:bg-brand-navy hover:text-white disabled:opacity-40"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              {Array.from({ length: snapCount }).map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => api?.scrollTo(i)}
+                  aria-label={`Go to testimonial ${i + 1}`}
+                  aria-current={i === selected}
+                  className={`h-2.5 rounded-full transition-all ${
+                    i === selected
+                      ? "w-7 bg-brand-gold"
+                      : "w-2.5 bg-brand-navy/20 hover:bg-brand-navy/40"
+                  }`}
+                />
+              ))}
             </div>
-          </div>
-        </div>
 
-        {/* Mobile controls */}
-        <div className="flex justify-center gap-4 mt-8 lg:hidden">
-          <button
-            onClick={prev}
-            aria-label="Previous testimonial"
-            className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-blue-50 transition"
+            <button
+              type="button"
+              onClick={() => api?.scrollNext()}
+              aria-label="Next testimonial"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand-navy shadow-sm ring-1 ring-brand-navy/10 transition hover:bg-brand-navy hover:text-white disabled:opacity-40"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
+          </div>
+        )}
+
+        {/* Invite more stories */}
+        <p className="mt-10 text-center text-sm text-slate-600">
+          Learning with LearnCil?{" "}
+          <a
+            href="mailto:info@learncil.com?subject=My%20LearnCil%20experience"
+            className="font-semibold text-brand-navy underline decoration-brand-gold decoration-2 underline-offset-4 hover:text-brand-navy-dark"
           >
-            <ArrowLeft className="w-5 h-5 text-blue-600" />
-          </button>
-          <button
-            onClick={next}
-            aria-label="Next testimonial"
-            className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-blue-50 transition"
-          >
-            <ArrowRight className="w-5 h-5 text-blue-600" />
-          </button>
-        </div>
+            Share your experience
+          </a>
+        </p>
       </div>
     </section>
   );
